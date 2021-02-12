@@ -24,5 +24,5 @@ find the perfect weight for my 10-rep max. A few reasons this app would be bette
 - As a user, I want to be able to select a preset list
 - As a user, I want to be able to view the different exercises available sorted by muscle groups.
 - As a user, I want to be able to start the workout queue.
-- As a user, I want to be able to record down details of the exercise (weight, sets, repetitions).
+- As a user, I want to be able to record down details of the exercise (sets, reps ,etc).
 - As a user, I want to be able to see a workout summary.
