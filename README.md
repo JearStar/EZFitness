@@ -6,8 +6,7 @@ This application will be a fitness app where before a workout session, users wil
 different exercises, either by a preset list or a custom list. They will be able to view different workouts grouped
 by muscle groups (e.g. biceps, triceps, pectorals, etc.) After selecting and queuing up exercises
 , they can hit *start* on the queue and as they complete workouts, they will be able to **record** how many sets
-, repetitions, weight of the exercise. They may choose to **remove** a workout after a queue has started
-. At the end of the workout, users can hit "*finished workout*" and the exercises in that **session will be logged and
+, repetitions, weight of the exercise.  At the end of the workout, users can hit "*finished workout*" and the exercises in that **session will be logged and
 stored**.
    
 This application will be used by **gym-goers** or maybe people who just want a **casual workout**. This is a project of
@@ -26,4 +25,4 @@ find the perfect weight for my 10-rep max. A few reasons this app would be bette
 - As a user, I want to be able to view the different exercises available sorted by muscle groups.
 - As a user, I want to be able to start the workout queue.
 - As a user, I want to be able to record down details of the exercise (weight, sets, repetitions).
-- As a user, I want to be able to log my workout.
+- As a user, I want to be able to see a workout summary.
