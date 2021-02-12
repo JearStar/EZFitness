@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Scanner;
 
 public abstract class Workout implements Exercises {
     //muscle group names
@@ -20,6 +21,7 @@ public abstract class Workout implements Exercises {
     public static final String QUADS = "Quads";
     public static final String HAMSTR = "Hamstrings";
     public static final String CALVES = "Calves";
+    public static final String CARDIO = "Cardio";
 
     //workout names
     public static final String BCURL = "Barbell Curl";
@@ -61,46 +63,18 @@ public abstract class Workout implements Exercises {
     public static final String STROW = "Seated Row";
     public static final String SUP = "Sit Up";
     public static final String UROW = "Upright Row";
-
+    public static final String ELLPT = "Elliptical";
+    public static final String TREAD = "Treadmill";
+    public static final String BIKE = "Bicycle";
+    public static final String ROWING = "Rowing Machine";
 
 
     protected String workoutName;
     protected List<String> muscleGroup;
-    protected int sets;
-    protected List<Integer> reps;
-    protected List<Integer> weights;
-
-    @Override
-    //REQUIRES: n > 0
-    //MODIFIES: this
-    //EFFECTS: sets number of sets of workout
-    public void setNumberOfSets(int n) {
-        this.sets = n;
-    }
 
     @Override
     public void addMuscleGroup(String s) {
         this.muscleGroup.add(s);
-    }
-
-    @Override
-    //REQUIRES: n > 0
-    //MODIFIES: this
-    //EFFECTS: sets number of reps of a set
-    public void setReps(int n) {
-        this.reps.add(n);
-    }
-
-    @Override
-    //EFFECTS: returns number of sets
-    public int getSets() {
-        return this.sets;
-    }
-
-    @Override
-    //EFFECTS: returns list of reps for however many sets
-    public List<Integer> getReps() {
-        return this.reps;
     }
 
     @Override
@@ -109,23 +83,15 @@ public abstract class Workout implements Exercises {
         return this.muscleGroup;
     }
 
-    @Override
-    //EFFECTS: returns list of weights for however many sets
-    public List<Integer> getWeight() {
-        return this.weights;
-    }
-
-    @Override
-    //REQUIRES: n >= 0
-    //MODIFIES: this
-    //EFFECTS: sets weight of a set
-    public void setWeight(int w) {
-        this.weights.add(w);
-    }
 
     @Override
     //EFFECTS: returns workout name
     public String getWorkoutName() {
         return this.workoutName;
     }
+
+    public abstract void goThroughWorkout();
+
+    public abstract String getSummary();
+
 }

@@ -1,12 +1,18 @@
 package model;
 
-import model.listofexercises.*;
+import listofexercises.cardioexercises.Bicycle;
+import listofexercises.cardioexercises.Elliptical;
+import listofexercises.cardioexercises.RowingMachine;
+import listofexercises.cardioexercises.TreadMill;
+import listofexercises.muscleexercises.*;
+
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import static model.Workout.*;
+import static ui.FitnessApp.*;
 
 public class WorkoutSession {
 
@@ -16,29 +22,116 @@ public class WorkoutSession {
         queue = new ArrayList<>();
     }
 
+    //EFFECTS: returns the queue
     public List<Workout> getQueue() {
         return this.queue;
     }
 
+    //MODIFIES: queue
+    //EFFECTS: adds workout to queue
     public void addWorkout(Workout w) {
         this.queue.add(w);
     }
 
+    //MODIFIES: queue
+    //EFFECTS: removes all instances of a workout from queue
     public void removeWorkout(String s) {
         Iterator<Workout> i = queue.iterator();
         while (i.hasNext()) {
             Workout w = i.next();
-            if (w.getWorkoutName().equals(s)) {
+            if (w.getWorkoutName().toLowerCase().equals(s)) {
                 i.remove();
             }
         }
     }
 
-    public void printCurrentSelections() {
-        System.out.println("\nCurrently in your list: ");
-        for (Workout w : this.getQueue()) {
-            System.out.println(w.getWorkoutName());
+    //EFFECTS: clears all workouts from queue
+    public void clearWorkouts() {
+        Iterator<Workout> i = queue.iterator();
+        while (i.hasNext()) {
+            Workout w = i.next();
+            i.remove();
         }
+    }
+
+    public void choosePresetList(String c) {
+        if (c.equals(LEG_DAY_COMMAND)) {
+            addLegDayExercises();
+        } else if (c.equals(CHEST_DAY_COMMAND)) {
+            addChestDayExercises();
+        } else if (c.equals(ARM_DAY_COMMAND)) {
+            addArmDayExercises();
+        } else if (c.equals(SHOULDER_DAY_COMMAND)) {
+            addShoulderDayExercises();
+        } else if (c.equals(ABS_DAY_COMMAND)) {
+            addAbsDayExercises();
+        } else {
+            addBackDayExercises();
+        }
+    }
+
+    private void addBackDayExercises() {
+        this.addWorkout(new BarbellRow());
+        this.addWorkout(new Deadlift());
+        this.addWorkout(new ChinUp());
+        this.addWorkout(new PullUp());
+        this.addWorkout(new SeatedRow());
+        this.addWorkout(new ReverseDumbellFly());
+        this.addWorkout(new DumbellRow());
+        this.addWorkout(new LatPulldown());
+        this.addWorkout(new HyperExtension());
+        this.addWorkout(new LandmineRow());
+
+    }
+
+    private void addAbsDayExercises() {
+        this.addWorkout(new BicycleCrunch());
+        this.addWorkout(new RussianTwist());
+        this.addWorkout(new MountainClimber());
+        this.addWorkout(new SitUp());
+        this.addWorkout(new ScissorKick());
+        this.addWorkout(new LegRaise());
+
+    }
+
+    private void addShoulderDayExercises() {
+        this.addWorkout(new DumbellShoulderPress());
+        this.addWorkout(new FacePull());
+        this.addWorkout(new UprightRow());
+        this.addWorkout(new ReverseDumbellFly());
+        this.addWorkout(new MountainClimber());
+        this.addWorkout(new PushUp());
+        this.addWorkout(new PullUp());
+    }
+
+    private void addArmDayExercises() {
+        this.addWorkout(new DumbellCurl());
+        this.addWorkout(new DumbellExtension());
+        this.addWorkout(new CableCurl());
+        this.addWorkout(new CableExtension());
+        this.addWorkout(new BarbellCurl());
+    }
+
+    private void addChestDayExercises() {
+        this.addWorkout(new BarbellPress());
+        this.addWorkout(new ChestPress());
+        this.addWorkout(new DumbellPress());
+        this.addWorkout(new CableFly());
+        this.addWorkout(new DumbellFly());
+        this.addWorkout(new PushUp());
+        this.addWorkout(new DumbellPullover());
+    }
+
+    public void addLegDayExercises() {
+        this.addWorkout(new BarbellSquat());
+        this.addWorkout(new CalfRaise());
+        this.addWorkout(new SeatedLegPress());
+        this.addWorkout(new LegExtension());
+        this.addWorkout(new HamstringCurl());
+        this.addWorkout(new Lunge());
+        this.addWorkout(new Bicycle());
+
+
     }
 
 
@@ -53,6 +146,10 @@ public class WorkoutSession {
             this.addWorkout(new BarbellRow());
         } else if (n.equals(BSQUAT.toLowerCase())) {
             this.addWorkout(new BarbellSquat());
+        } else if (n.equals(BIKE.toLowerCase())) {
+            this.addWorkout((new Bicycle()));
+        } else if (n.equals(ELLPT.toLowerCase())) {
+            this.addWorkout(new Elliptical());
         } else {
             whichWorkoutToAdd2(n);
         }
@@ -60,8 +157,12 @@ public class WorkoutSession {
 
     //MODIFIES: queue
     //EFFECTS: will a new workout to queue given the name of a workout. Part 2 of 7 because i have approx. 40 cases.
-    private void whichWorkoutToAdd2(String n) {
-        if (n.equals(BICRUNCH.toLowerCase())) {
+    public void whichWorkoutToAdd2(String n) {
+        if (n.equals(ROWING.toLowerCase())) {
+            this.addWorkout(new RowingMachine());
+        } else if (n.equals(TREAD.toLowerCase())) {
+            this.addWorkout(new TreadMill());
+        } else if (n.equals(BICRUNCH.toLowerCase())) {
             this.addWorkout(new BicycleCrunch());
         } else if (n.equals(CCURL.toLowerCase())) {
             this.addWorkout(new CableCurl());
@@ -76,7 +177,7 @@ public class WorkoutSession {
 
     //MODIFIES: queue
     //EFFECTS: will a new workout to queue given the name of a workout. Part 3 of 7 because i have approx. 40 cases.
-    private void whichWorkoutToAdd3(String n) {
+    public void whichWorkoutToAdd3(String n) {
         if (n.equals(CALFR.toLowerCase())) {
             this.addWorkout(new CalfRaise());
         } else if (n.equals(CHTPRS.toLowerCase())) {
@@ -96,7 +197,7 @@ public class WorkoutSession {
 
     //MODIFIES: queue
     //EFFECTS: will a new workout to queue given the name of a workout. Part 4 of 7 because i have approx. 40 cases.
-    private void whichWorkoutToAdd4(String n) {
+    public void whichWorkoutToAdd4(String n) {
         if (n.equals(DEXT.toLowerCase())) {
             this.addWorkout(new DumbellExtension());
         } else if (n.equals(DFLY.toLowerCase())) {
@@ -117,7 +218,7 @@ public class WorkoutSession {
 
     //MODIFIES: queue
     //EFFECTS: will a new workout to queue given the name of a workout. Part 5 of 7 because i have approx. 40 cases.
-    private void whichWorkoutToAdd5(String n) {
+    public void whichWorkoutToAdd5(String n) {
         if (n.equals(DSHPR.toLowerCase())) {
             this.addWorkout(new DumbellShoulderPress());
         } else if (n.equals(FPULL.toLowerCase())) {
@@ -137,7 +238,7 @@ public class WorkoutSession {
 
     //MODIFIES: queue
     //EFFECTS: will a new workout to queue given the name of a workout. Part 6 of 7 because i have approx. 40 cases.
-    private void whichWorkoutToAdd6(String n) {
+    public void whichWorkoutToAdd6(String n) {
         if (n.equals(LGEXT.toLowerCase())) {
             this.addWorkout(new LegExtension());
         } else if (n.equals(LGRAISE.toLowerCase())) {
@@ -158,7 +259,7 @@ public class WorkoutSession {
 
     //MODIFIES: queue
     //EFFECTS: will a new workout to queue given the name of a workout. Part 7 of 7 because i have approx. 40 cases.
-    private void whichWorkoutToAdd7(String n) {
+    public void whichWorkoutToAdd7(String n) {
         if (n.equals(RVDFLY.toLowerCase())) {
             this.addWorkout(new ReverseDumbellFly());
         } else if (n.equals(RTWIST.toLowerCase())) {
