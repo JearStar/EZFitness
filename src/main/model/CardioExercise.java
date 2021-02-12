@@ -23,12 +23,12 @@ public abstract class CardioExercise extends Workout {
     //MODIFIES: this
     //EFFECTS: goes through the workout
     public void goThroughWorkout() {
-        boolean stillInputting = true;
-        Scanner input = new Scanner(System.in);
-
-        informUserMinutesOnCardio(this.getWorkoutName());
-        double time = input.nextDouble();
-        this.setTime(time);
+//        boolean stillInputting = true;
+//        Scanner input = new Scanner(System.in);
+//
+//        informUserMinutesOnCardio(this.getWorkoutName());
+//        double time = input.nextDouble();
+//        this.setTime(time);
     }
 
     //EFFECTS: retrieves summary of this workout

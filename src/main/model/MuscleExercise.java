@@ -54,18 +54,18 @@ public abstract class MuscleExercise extends Workout {
     }
 
     public void goThroughWorkout() {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Please enter the number of sets for " + this.getWorkoutName());
-        int sets = input.nextInt();
-        this.setNumberOfSets(sets);
-        for (int i = 0; i < this.getSets(); i++) {
-            System.out.println("\nPlease enter the number of reps for set number " + (i + 1));
-            int reps = input.nextInt();
-            System.out.println("\nPlease enter the weight done for set " + (i + 1));
-            int weight = input.nextInt();
-            this.setReps(reps);
-            this.setWeight(weight);
-        }
+//        Scanner input = new Scanner(System.in);
+//        System.out.println("Please enter the number of sets for " + this.getWorkoutName());
+//        int sets = input.nextInt();
+//        this.setNumberOfSets(sets);
+//        for (int i = 0; i < this.getSets(); i++) {
+//            System.out.println("\nPlease enter the number of reps for set number " + (i + 1));
+//            int reps = input.nextInt();
+//            System.out.println("\nPlease enter the weight done for set " + (i + 1));
+//            int weight = input.nextInt();
+//            this.setReps(reps);
+//            this.setWeight(weight);
+//        }
     }
 
     public String getSummary() {
