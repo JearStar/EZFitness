@@ -49,6 +49,7 @@ public class WorkoutSession {
         }
     }
 
+    //EFFECTS: chooses which preset workout list to use
     public void choosePresetList(String c) {
         if (c.equals(LEG_DAY_COMMAND)) {
             addLegDayExercises();
@@ -66,6 +67,7 @@ public class WorkoutSession {
     }
 
 
+    //EFFECTS: adds exercises for a back day preset list
     private void addBackDayExercises() {
         this.addWorkout(new BarbellRow());
         this.addWorkout(new Deadlift());
@@ -80,6 +82,7 @@ public class WorkoutSession {
 
     }
 
+    //EFFECTS: adds exercises for an abs day preset list
     private void addAbsDayExercises() {
         this.addWorkout(new BicycleCrunch());
         this.addWorkout(new RussianTwist());
@@ -90,6 +93,7 @@ public class WorkoutSession {
 
     }
 
+    //EFFECTS: adds exercises for a shoulder day preset list
     private void addShoulderDayExercises() {
         this.addWorkout(new DumbellShoulderPress());
         this.addWorkout(new FacePull());
@@ -100,6 +104,7 @@ public class WorkoutSession {
         this.addWorkout(new PullUp());
     }
 
+    //EFFECTS: adds exercises for an arm day preset list
     private void addArmDayExercises() {
         this.addWorkout(new DumbellCurl());
         this.addWorkout(new DumbellExtension());
@@ -108,6 +113,7 @@ public class WorkoutSession {
         this.addWorkout(new BarbellCurl());
     }
 
+    //EFFECTS: adds exercises for a chest day preset list
     private void addChestDayExercises() {
         this.addWorkout(new BarbellPress());
         this.addWorkout(new ChestPress());
@@ -118,6 +124,7 @@ public class WorkoutSession {
         this.addWorkout(new DumbellPullover());
     }
 
+    //EFFECTS: adds exercises for a leg day preset list
     public void addLegDayExercises() {
         this.addWorkout(new BarbellSquat());
         this.addWorkout(new CalfRaise());

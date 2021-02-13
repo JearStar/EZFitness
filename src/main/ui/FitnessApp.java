@@ -97,6 +97,7 @@ public class FitnessApp {
         proceedAfterAddingExercise();
     }
 
+    //EFFECTS: handles user input on selection screen
     private void handleOtherUserInputs(String c) {
         if (isEqualToViewSelection(c)) {
             changeView(c);
@@ -115,6 +116,7 @@ public class FitnessApp {
         }
     }
 
+    //EFFECTS: methods to run after exercise-adding has been completed
     private void proceedAfterAddingExercise() {
         beginWorkout();
         printWorkoutSummary();
