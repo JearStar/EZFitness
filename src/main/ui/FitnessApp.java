@@ -6,11 +6,9 @@ import listofexercises.cardioexercises.Elliptical;
 import listofexercises.cardioexercises.RowingMachine;
 import listofexercises.cardioexercises.TreadMill;
 import listofexercises.muscleexercises.*;
-import model.CardioExercise;
 import model.MuscleExercise;
 import model.Workout;
 import model.WorkoutSession;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +30,7 @@ public class FitnessApp {
     public static final String BACK_DAY_COMMAND = "Back Day";
 
 
-    private static Scanner input = new Scanner(System.in);
+    private static final Scanner input = new Scanner(System.in);
     List<Workout> selectionList = new ArrayList<>();
     WorkoutSession session;
 
@@ -103,7 +101,7 @@ public class FitnessApp {
         if (isEqualToViewSelection(c)) {
             changeView(c);
         } else if (isEqualToWorkoutSelection(c)) {
-            session.whichWorkoutToAdd(c);
+            whichWorkoutToAdd(c);
             printCurrentSelections();
         } else if (c.equals("delete")) {
             deleteWorkOut();
@@ -122,38 +120,32 @@ public class FitnessApp {
         printWorkoutSummary();
     }
 
-//    //EFFECTS: begins the workout
-//    private void beginWorkout() {
-//        for (Workout w : session.getQueue()) {
-//            w.goThroughWorkout();
-//        }
-//    }
-
     //EFFECTS: begins the workout
     private void beginWorkout() {
         for (Workout w : session.getQueue()) {
+            List<Double> infoList = new ArrayList<>();
             if (w instanceof MuscleExercise) {
 
-                int sets;
-                List<Integer> reps = new ArrayList<>();
-                List<Integer> weight = new ArrayList<>();
-
                 System.out.println("Please enter the number of sets done for " + w.getWorkoutName());
-                sets = abs(input.nextInt());
+                double sets = abs(input.nextDouble());
+                infoList.add(sets);
 
                 for (int i = 0; i < sets; i++) {
                     System.out.println("\nPlease enter number of reps for set " + (i + 1));
-                    reps.add(abs(input.nextInt()));
+                    double reps = abs(input.nextDouble());
+                    infoList.add(reps);
 
                     System.out.println("\nPlease enter the weight done for set " + (i + 1));
-                    weight.add(abs(input.nextInt()));
+                    double weight = abs(input.nextDouble());
+                    infoList.add(weight);
                 }
-                w.goThroughWorkout(sets, reps, weight);
+                w.goThroughWorkout(infoList);
             } else {
 
                 System.out.println("Please enter number of minutes done for " + w.getWorkoutName());
                 double time = input.nextDouble();
-                w.goThroughWorkout(time);
+                infoList.add(time);
+                w.goThroughWorkout(infoList);
             }
 
         }
@@ -225,6 +217,149 @@ public class FitnessApp {
                 || c.equals(PECS.toLowerCase()) || c.equals(ABS.toLowerCase()) || c.equals(OBLQ.toLowerCase())
                 || c.equals(GLUTES.toLowerCase()) || c.equals(QUADS.toLowerCase()) || c.equals(HAMSTR.toLowerCase())
                 || c.equals(CALVES.toLowerCase())) || c.equals(CARDIO.toLowerCase());
+    }
+
+    //MODIFIES: queue
+    //EFFECTS: will a new workout to queue given the name of a workout. Part 1 of 7 because i have approx. 40 cases.
+    private void whichWorkoutToAdd(String n) {
+        if (n.equals(BCURL.toLowerCase())) {
+            session.addWorkout(new BarbellCurl());
+        } else if (n.equals(BPRESS.toLowerCase())) {
+            session.addWorkout(new BarbellPress());
+        } else if (n.equals(BROW.toLowerCase())) {
+            session.addWorkout(new BarbellRow());
+        } else if (n.equals(BSQUAT.toLowerCase())) {
+            session.addWorkout(new BarbellSquat());
+        } else if (n.equals(BIKE.toLowerCase())) {
+            session.addWorkout((new Bicycle()));
+        } else if (n.equals(ELLPT.toLowerCase())) {
+            session.addWorkout(new Elliptical());
+        } else {
+            whichWorkoutToAdd2(n);
+        }
+    }
+
+    //MODIFIES: queue
+    //EFFECTS: will a new workout to queue given the name of a workout. Part 2 of 7 because i have approx. 40 cases.
+    private void whichWorkoutToAdd2(String n) {
+        if (n.equals(ROWING.toLowerCase())) {
+            session.addWorkout(new RowingMachine());
+        } else if (n.equals(TREAD.toLowerCase())) {
+            session.addWorkout(new TreadMill());
+        } else if (n.equals(BICRUNCH.toLowerCase())) {
+            session.addWorkout(new BicycleCrunch());
+        } else if (n.equals(CCURL.toLowerCase())) {
+            session.addWorkout(new CableCurl());
+        } else if (n.equals(CEXT.toLowerCase())) {
+            session.addWorkout(new CableExtension());
+        } else if (n.equals(CFLY.toLowerCase())) {
+            session.addWorkout(new CableFly());
+        } else {
+            whichWorkoutToAdd3(n);
+        }
+    }
+
+    //MODIFIES: queue
+    //EFFECTS: will a new workout to queue given the name of a workout. Part 3 of 7 because i have approx. 40 cases.
+    private void whichWorkoutToAdd3(String n) {
+        if (n.equals(CALFR.toLowerCase())) {
+            session.addWorkout(new CalfRaise());
+        } else if (n.equals(CHTPRS.toLowerCase())) {
+            session.addWorkout(new ChestPress());
+        } else if (n.equals(CHUP.toLowerCase())) {
+            session.addWorkout(new ChinUp());
+        } else if (n.equals(CLEAN.toLowerCase())) {
+            session.addWorkout(new Clean());
+        } else if (n.equals(DLIFT.toLowerCase())) {
+            session.addWorkout(new Deadlift());
+        } else if (n.equals(DCURL.toLowerCase())) {
+            session.addWorkout(new DumbellCurl());
+        } else {
+            whichWorkoutToAdd4(n);
+        }
+    }
+
+    //MODIFIES: queue
+    //EFFECTS: will a new workout to queue given the name of a workout. Part 4 of 7 because i have approx. 40 cases.
+    private void whichWorkoutToAdd4(String n) {
+        if (n.equals(DEXT.toLowerCase())) {
+            session.addWorkout(new DumbellExtension());
+        } else if (n.equals(DFLY.toLowerCase())) {
+            session.addWorkout(new DumbellFly());
+        } else if (n.equals(DPRESS.toLowerCase())) {
+            session.addWorkout(new DumbellPress());
+        } else if (n.equals(DPULLO.toLowerCase())) {
+            session.addWorkout(new DumbellPullover());
+        } else if (n.equals(DRAISE.toLowerCase())) {
+            session.addWorkout(new DumbellRaise());
+        } else if (n.equals(DROW.toLowerCase())) {
+            session.addWorkout(new DumbellRow());
+        } else {
+            whichWorkoutToAdd5(n);
+        }
+
+    }
+
+    //MODIFIES: queue
+    //EFFECTS: will a new workout to queue given the name of a workout. Part 5 of 7 because i have approx. 40 cases.
+    private void whichWorkoutToAdd5(String n) {
+        if (n.equals(DSHPR.toLowerCase())) {
+            session.addWorkout(new DumbellShoulderPress());
+        } else if (n.equals(FPULL.toLowerCase())) {
+            session.addWorkout(new FacePull());
+        } else if (n.equals(HMCURL.toLowerCase())) {
+            session.addWorkout(new HamstringCurl());
+        } else if (n.equals(HPREXT.toLowerCase())) {
+            session.addWorkout(new HyperExtension());
+        } else if (n.equals(LMROW.toLowerCase())) {
+            session.addWorkout(new LandmineRow());
+        } else if (n.equals(LATPD.toLowerCase())) {
+            session.addWorkout(new LatPulldown());
+        } else {
+            whichWorkoutToAdd6(n);
+        }
+    }
+
+    //MODIFIES: queue
+    //EFFECTS: will a new workout to queue given the name of a workout. Part 6 of 7 because i have approx. 40 cases.
+    private void whichWorkoutToAdd6(String n) {
+        if (n.equals(LGEXT.toLowerCase())) {
+            session.addWorkout(new LegExtension());
+        } else if (n.equals(LGRAISE.toLowerCase())) {
+            session.addWorkout(new LegRaise());
+        } else if (n.equals(LNG.toLowerCase())) {
+            session.addWorkout(new Lunge());
+        } else if (n.equals(MTCLB.toLowerCase())) {
+            session.addWorkout(new MountainClimber());
+        } else if (n.equals(PLUP.toLowerCase())) {
+            session.addWorkout(new PullUp());
+        } else if (n.equals(PSUP.toLowerCase())) {
+            session.addWorkout(new PushUp());
+        } else {
+            whichWorkoutToAdd7(n);
+        }
+
+    }
+
+    //MODIFIES: queue
+    //EFFECTS: will a new workout to queue given the name of a workout. Part 7 of 7 because i have approx. 40 cases.
+    private void whichWorkoutToAdd7(String n) {
+        if (n.equals(RVDFLY.toLowerCase())) {
+            session.addWorkout(new ReverseDumbellFly());
+        } else if (n.equals(RTWIST.toLowerCase())) {
+            session.addWorkout(new RussianTwist());
+        } else if (n.equals(SCKICK.toLowerCase())) {
+            session.addWorkout(new ScissorKick());
+        } else if (n.equals(STLGPRS.toLowerCase())) {
+            session.addWorkout(new SeatedLegPress());
+        } else if (n.equals(STROW.toLowerCase())) {
+            session.addWorkout(new SeatedRow());
+        } else if (n.equals(SUP.toLowerCase())) {
+            session.addWorkout(new SitUp());
+        } else if (n.equals(UROW.toLowerCase())) {
+            session.addWorkout(new UprightRow());
+
+        }
     }
 
     //EFFECTS: checks if user input was equal to a workout selection

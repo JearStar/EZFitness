@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 import static java.lang.Math.abs;
 
 public abstract class CardioExercise extends Workout {
@@ -19,8 +21,8 @@ public abstract class CardioExercise extends Workout {
 
     //MODIFIES: this
     //EFFECTS: goes through the workout
-    public void goThroughWorkout(double time) {
-        this.setTime(time);
+    public void goThroughWorkout(List<Double> infoList) {
+        this.setTime(infoList.get(0));
     }
 
     //EFFECTS: retrieves summary of this workout

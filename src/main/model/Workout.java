@@ -1,9 +1,8 @@
 package model;
 
 import java.util.List;
-import java.util.Scanner;
 
-public class Workout implements Exercises {
+public abstract class Workout implements Exercises {
     //muscle group names
     public static final String BI = "Biceps";
     public static final String TRI = "Triceps";
@@ -73,6 +72,8 @@ public class Workout implements Exercises {
     protected List<String> muscleGroup;
 
     @Override
+    //MODIFIES: this
+    //EFFECTS: adds muscle group to this exercise
     public void addMuscleGroup(String s) {
         this.muscleGroup.add(s);
     }
@@ -83,23 +84,16 @@ public class Workout implements Exercises {
         return this.muscleGroup;
     }
 
-
     @Override
     //EFFECTS: returns workout name
     public String getWorkoutName() {
         return this.workoutName;
     }
 
-    //EFFECTS: will set details of workout given details of a muscle exercise
-    public void goThroughWorkout(int sets, List<Integer> reps, List<Integer> weights) {
-    }
-
     //EFFECTS: will set details of workout given details of a cardio exercise
-    public void goThroughWorkout(double d) {
-    }
+    public abstract void goThroughWorkout(List<Double> infoList);
 
-    public String getSummary() {
-        return "";
-    }
+    //EFFECTS: retrieves the summary for this workout
+    public abstract String getSummary();
 
 }

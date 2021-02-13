@@ -65,26 +65,60 @@ public class MuscleExerciseTest {
         testMuscleExercise.setReps(10);
         testMuscleExercise.setReps(7);
 
-        assertEquals("\nSets: 3" + "\nReps: 8 10 7 " + "\nWeights: 200 195 180 ",
+        assertEquals("Sets: 3" + "\nReps: 8 10 7 " + "\nWeights: 200 195 180 ",
                 testMuscleExercise.getSummary());
     }
 
     @Test
-    public void testGoThroughWorkout(){
-        int sets = 3;
+    public void testListOfDoubleToInt(){
+        List<Double> testList = new ArrayList<>();
+        List<Integer> expectedList = new ArrayList<>();
+
+        testList.add(1.0);
+        testList.add(2.0);
+        testList.add(3.0);
+        testList.add(4.0);
+        testList.add(5.0);
+        testList.add(6.0);
+        testList.add(7.0);
+
+        expectedList.add(1);
+        expectedList.add(2);
+        expectedList.add(3);
+        expectedList.add(4);
+        expectedList.add(5);
+        expectedList.add(6);
+        expectedList.add(7);
+
+        assertEquals(expectedList, MuscleExercise.listOfDoubleToInteger(testList));
+
+    }
+
+    @Test
+    public void testGoThroughWorkout() {
+        List<Double> testData = new ArrayList<>();
         List<Integer> testReps = new ArrayList<>();
         List<Integer> testWeights = new ArrayList<>();
+
+        testData.add(3.0);
+        testData.add(10.0);
+        testData.add(190.0);
+        testData.add(8.0);
+        testData.add(210.0);
+        testData.add(9.0);
+        testData.add(180.0);
 
         testReps.add(10);
         testReps.add(8);
         testReps.add(9);
 
-        testWeights.add(200);
+        testWeights.add(190);
+        testWeights.add(210);
         testWeights.add(180);
-        testWeights.add(195);
 
-        testMuscleExercise.goThroughWorkout(sets, testReps, testWeights);
-        assertEquals(sets, testMuscleExercise.getSets());
+        testMuscleExercise.goThroughWorkout(testData);
+
+        assertEquals(3, testMuscleExercise.getSets());
         assertEquals(testReps, testMuscleExercise.getReps());
         assertEquals(testWeights, testMuscleExercise.getWeight());
 

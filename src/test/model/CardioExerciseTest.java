@@ -4,6 +4,9 @@ import listofexercises.cardioexercises.Bicycle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CardioExerciseTest {
@@ -31,10 +34,12 @@ public class CardioExerciseTest {
 
     @Test
     public void testGoThroughWorkout(){
-        double testTime = 25.0;
-        testCardioExercise.goThroughWorkout(testTime);
+        List<Double> testData = new ArrayList<>();
+        testData.add(25.0);
+        testCardioExercise.goThroughWorkout(testData);
 
-        assertEquals(testTime, testCardioExercise.getTime());
+        assertEquals(25.0, testCardioExercise.getTime());
     }
+
 
 }

@@ -1,5 +1,6 @@
 package model;
 
+import listofexercises.cardioexercises.Bicycle;
 import listofexercises.muscleexercises.BarbellCurl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,11 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WorkoutTest {
     Workout testMuscleExercise;
+    Workout testCardioExercise;
     List<String> barbellCurlMuscleGroups;
 
     @BeforeEach
     public void setup() {
         testMuscleExercise = new BarbellCurl();
+        testCardioExercise = new Bicycle();
         barbellCurlMuscleGroups = new ArrayList<>();
         barbellCurlMuscleGroups.add(BI);
     }

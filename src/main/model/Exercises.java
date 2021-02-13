@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface Exercises {
 
+    //REQUIRES: string corresponds to a muscle group
+    //MODIFIES: this
     //EFFECTS: sets muscle groups of workout
     public void addMuscleGroup(String s);
 
