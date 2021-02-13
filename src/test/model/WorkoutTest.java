@@ -90,4 +90,5 @@ class WorkoutTest {
     public void testGetWorkoutName() {
         assertEquals(BCURL, testMuscleExercise.getWorkoutName());
     }
+
 }

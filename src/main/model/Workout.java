@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 import java.util.Scanner;
 
-public abstract class Workout implements Exercises {
+public class Workout implements Exercises {
     //muscle group names
     public static final String BI = "Biceps";
     public static final String TRI = "Triceps";
@@ -90,8 +90,16 @@ public abstract class Workout implements Exercises {
         return this.workoutName;
     }
 
-    public abstract void goThroughWorkout();
+    //EFFECTS: will set details of workout given details of a muscle exercise
+    public void goThroughWorkout(int sets, List<Integer> reps, List<Integer> weights) {
+    }
 
-    public abstract String getSummary();
+    //EFFECTS: will set details of workout given details of a cardio exercise
+    public void goThroughWorkout(double d) {
+    }
+
+    public String getSummary() {
+        return "";
+    }
 
 }

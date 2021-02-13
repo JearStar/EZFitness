@@ -6,6 +6,8 @@ import listofexercises.cardioexercises.Elliptical;
 import listofexercises.cardioexercises.RowingMachine;
 import listofexercises.cardioexercises.TreadMill;
 import listofexercises.muscleexercises.*;
+import model.CardioExercise;
+import model.MuscleExercise;
 import model.Workout;
 import model.WorkoutSession;
 
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Math.abs;
 import static model.Workout.*;
 
 public class FitnessApp {
@@ -29,7 +32,7 @@ public class FitnessApp {
     public static final String BACK_DAY_COMMAND = "Back Day";
 
 
-    private Scanner input = new Scanner(System.in);
+    private static Scanner input = new Scanner(System.in);
     List<Workout> selectionList = new ArrayList<>();
     WorkoutSession session;
 
@@ -49,7 +52,8 @@ public class FitnessApp {
 
         while (keepGoing) {
             displayTitleScreen();
-            command = input.nextLine();
+            Scanner in = new Scanner(System.in);
+            command = in.nextLine();
             command = command.toLowerCase();
 
             if (command.equals(QUIT_COMMAND)) {
@@ -118,10 +122,40 @@ public class FitnessApp {
         printWorkoutSummary();
     }
 
+//    //EFFECTS: begins the workout
+//    private void beginWorkout() {
+//        for (Workout w : session.getQueue()) {
+//            w.goThroughWorkout();
+//        }
+//    }
+
     //EFFECTS: begins the workout
     private void beginWorkout() {
         for (Workout w : session.getQueue()) {
-            w.goThroughWorkout();
+            if (w instanceof MuscleExercise) {
+
+                int sets;
+                List<Integer> reps = new ArrayList<>();
+                List<Integer> weight = new ArrayList<>();
+
+                System.out.println("Please enter the number of sets done for " + w.getWorkoutName());
+                sets = abs(input.nextInt());
+
+                for (int i = 0; i < sets; i++) {
+                    System.out.println("\nPlease enter number of reps for set " + (i + 1));
+                    reps.add(abs(input.nextInt()));
+
+                    System.out.println("\nPlease enter the weight done for set " + (i + 1));
+                    weight.add(abs(input.nextInt()));
+                }
+                w.goThroughWorkout(sets, reps, weight);
+            } else {
+
+                System.out.println("Please enter number of minutes done for " + w.getWorkoutName());
+                double time = input.nextDouble();
+                w.goThroughWorkout(time);
+            }
+
         }
     }
 

@@ -1,7 +1,6 @@
 package model;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static java.lang.Math.abs;
 
@@ -12,7 +11,6 @@ public abstract class MuscleExercise extends Workout {
     protected List<Integer> weights;
 
 
-    //REQUIRES: n >= 0
     //MODIFIES: this
     //EFFECTS: sets weight of a set
     public void setWeight(int w) {
@@ -20,15 +18,13 @@ public abstract class MuscleExercise extends Workout {
     }
 
 
-    //REQUIRES: n > 0
     //MODIFIES: this
     //EFFECTS: sets number of sets of workout
     public void setNumberOfSets(int n) {
-        this.sets = n;
+        this.sets = abs(n);
     }
 
 
-    //REQUIRES: n > 0
     //MODIFIES: this
     //EFFECTS: sets number of reps of a set
     public void setReps(int n) {
@@ -53,21 +49,15 @@ public abstract class MuscleExercise extends Workout {
         return this.reps;
     }
 
-    public void goThroughWorkout() {
-//        Scanner input = new Scanner(System.in);
-//        System.out.println("Please enter the number of sets for " + this.getWorkoutName());
-//        int sets = input.nextInt();
-//        this.setNumberOfSets(sets);
-//        for (int i = 0; i < this.getSets(); i++) {
-//            System.out.println("\nPlease enter the number of reps for set number " + (i + 1));
-//            int reps = input.nextInt();
-//            System.out.println("\nPlease enter the weight done for set " + (i + 1));
-//            int weight = input.nextInt();
-//            this.setReps(reps);
-//            this.setWeight(weight);
-//        }
+    //MODIFIES: this
+    //EFFECTS: will set details of workout given details of a muscle exercise
+    public void goThroughWorkout(int sets, List<Integer> reps, List<Integer> weights) {
+        setNumberOfSets(sets);
+        this.reps = reps;
+        this.weights = weights;
     }
 
+    //EFFECTS: returns a string summarizing this workout
     public String getSummary() {
         String reps = "";
         String weights = "";

@@ -1,9 +1,6 @@
 package model;
 
-import java.util.Scanner;
-
 import static java.lang.Math.abs;
-import static ui.FitnessApp.informUserMinutesOnCardio;
 
 public abstract class CardioExercise extends Workout {
 
@@ -22,13 +19,8 @@ public abstract class CardioExercise extends Workout {
 
     //MODIFIES: this
     //EFFECTS: goes through the workout
-    public void goThroughWorkout() {
-//        boolean stillInputting = true;
-//        Scanner input = new Scanner(System.in);
-//
-//        informUserMinutesOnCardio(this.getWorkoutName());
-//        double time = input.nextDouble();
-//        this.setTime(time);
+    public void goThroughWorkout(double time) {
+        this.setTime(time);
     }
 
     //EFFECTS: retrieves summary of this workout

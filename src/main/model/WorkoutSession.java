@@ -70,6 +70,7 @@ public class WorkoutSession {
         }
     }
 
+
     private void addBackDayExercises() {
         this.addWorkout(new BarbellRow());
         this.addWorkout(new Deadlift());

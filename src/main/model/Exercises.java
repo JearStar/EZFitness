@@ -13,6 +13,4 @@ public interface Exercises {
     //EFFECTS: returns workout name
     public String getWorkoutName();
 
-
-
 }
