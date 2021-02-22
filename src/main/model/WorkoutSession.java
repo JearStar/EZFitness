@@ -9,6 +9,10 @@ import java.util.List;
 
 import static ui.FitnessApp.*;
 
+/**
+ * A workout session that has a queue and methods that operate on this queue
+ */
+
 public class WorkoutSession {
 
     private final List<Workout> queue;

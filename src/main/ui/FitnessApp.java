@@ -17,6 +17,10 @@ import java.util.Scanner;
 import static java.lang.Math.abs;
 import static model.Workout.*;
 
+/**
+ * Fitness app class that combines user interface and classes in model
+ */
+
 public class FitnessApp {
     public static final String APPNAME = "EZ Fitness";
     public static final String WORKOUT_SESSION_COMMAND = "start";

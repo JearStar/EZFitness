@@ -5,6 +5,10 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+/**
+ * Abstract class containing all properties of muscle exercises
+ */
+
 public abstract class MuscleExercise extends Workout {
 
     protected int sets;

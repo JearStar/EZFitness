@@ -2,6 +2,11 @@ package model;
 
 import java.util.List;
 
+/**
+ * Abstract class that contains all properties and methods of all workouts regardless of whether it is
+ * muscle or cardio.
+ */
+
 public abstract class Workout implements Exercises {
     //muscle group names
     public static final String BI = "Biceps";

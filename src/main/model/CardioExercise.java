@@ -4,6 +4,11 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+/**
+ * Abstract class containing all properties for cardio exercises
+ */
+
+
 public abstract class CardioExercise extends Workout {
 
     protected double time;
