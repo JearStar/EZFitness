@@ -1,5 +1,9 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.List;
 
 /**
@@ -7,7 +11,7 @@ import java.util.List;
  * muscle or cardio.
  */
 
-public abstract class Workout implements Exercises {
+public abstract class Workout implements Writable {
     //muscle group names
     public static final String BI = "Biceps";
     public static final String TRI = "Triceps";
@@ -76,20 +80,17 @@ public abstract class Workout implements Exercises {
     protected String workoutName;
     protected List<String> muscleGroup;
 
-    @Override
     //MODIFIES: this
     //EFFECTS: adds muscle group to this exercise
     public void addMuscleGroup(String s) {
         this.muscleGroup.add(s);
     }
 
-    @Override
     //EFFECTS: returns list of muscle groups of workout
     public List<String> getMuscleGroup() {
         return this.muscleGroup;
     }
 
-    @Override
     //EFFECTS: returns workout name
     public String getWorkoutName() {
         return this.workoutName;
@@ -100,5 +101,6 @@ public abstract class Workout implements Exercises {
 
     //EFFECTS: retrieves the summary for this workout
     public abstract String getSummary();
+
 
 }

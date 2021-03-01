@@ -26,3 +26,6 @@ find the perfect weight for my 10-rep max. A few reasons this app would be bette
 - As a user, I want to be able to start the workout queue.
 - As a user, I want to be able to record down details of the exercise (sets, reps ,etc).
 - As a user, I want to be able to see a workout summary.
+- As a user, I want to be able to close the app and pick up where I left off.
+- As a user, I want to be able to save my workout summaries.
+- As a user, I want to be able to load and view my past workout summaries.

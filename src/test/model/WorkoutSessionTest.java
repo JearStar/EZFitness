@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static model.Workout.*;
+import static model.WorkoutSession.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ui.FitnessApp.*;
@@ -204,177 +205,187 @@ public class WorkoutSessionTest {
         }
     }
 
-//    @Test
-//    public void testWhichWorkoutToAdd() {
-//        List<String> expectedList = new ArrayList<>();
-//        expectedList.add(BCURL);
-//        expectedList.add(BPRESS);
-//        expectedList.add(BROW);
-//        expectedList.add(BSQUAT);
-//        expectedList.add(BIKE);
-//        expectedList.add(ELLPT);
-//        expectedList.add(ROWING);
-//
-//        testSession.whichWorkoutToAdd(BCURL);
-//        testSession.whichWorkoutToAdd(BPRESS);
-//        testSession.whichWorkoutToAdd(BROW);
-//        testSession.whichWorkoutToAdd(BSQUAT);
-//        testSession.whichWorkoutToAdd(BIKE);
-//        testSession.whichWorkoutToAdd(ELLPT);
-//        testSession.whichWorkoutToAdd(ROWING);
-//
-//        for (Workout w : testSession.getQueue()) {
-//            assertTrue(expectedList.contains(w.getWorkoutName()));
-//        }
-//
-//    }
-//
-//    @Test
-//    public void testWhichWorkoutToAdd2() {
-//        List<String> expectedList = new ArrayList<>();
-//        expectedList.add(ROWING);
-//        expectedList.add(TREAD);
-//        expectedList.add(BICRUNCH);
-//        expectedList.add(CCURL);
-//        expectedList.add(CEXT);
-//        expectedList.add(CFLY);
-//        expectedList.add(CALFR);
-//
-//        testSession.whichWorkoutToAdd2(ROWING);
-//        testSession.whichWorkoutToAdd2(TREAD);
-//        testSession.whichWorkoutToAdd2(BICRUNCH);
-//        testSession.whichWorkoutToAdd2(CCURL);
-//        testSession.whichWorkoutToAdd2(CEXT);
-//        testSession.whichWorkoutToAdd2(CFLY);
-//        testSession.whichWorkoutToAdd2(CALFR);
-//
-//        for (Workout w : testSession.getQueue()) {
-//            assertTrue(expectedList.contains(w.getWorkoutName()));
-//        }
-//
-//    }
-//
-//    @Test
-//    public void testWhichWorkoutToAdd3() {
-//        List<String> expectedList = new ArrayList<>();
-//        expectedList.add(CALFR);
-//        expectedList.add(CHTPRS);
-//        expectedList.add(CHUP);
-//        expectedList.add(CLEAN);
-//        expectedList.add(DLIFT);
-//        expectedList.add(DCURL);
-//        expectedList.add(DEXT);
-//
-//        testSession.whichWorkoutToAdd3(CALFR);
-//        testSession.whichWorkoutToAdd3(CHTPRS);
-//        testSession.whichWorkoutToAdd3(CHUP);
-//        testSession.whichWorkoutToAdd3(CLEAN);
-//        testSession.whichWorkoutToAdd3(DLIFT);
-//        testSession.whichWorkoutToAdd3(DCURL);
-//        testSession.whichWorkoutToAdd3(DEXT);
-//
-//        for (Workout w : testSession.getQueue()) {
-//            assertTrue(expectedList.contains(w.getWorkoutName()));
-//        }
-//
-//    }
-//
-//    @Test
-//    public void testWhichWorkoutToAdd4() {
-//        List<String> expectedList = new ArrayList<>();
-//        expectedList.add(DEXT);
-//        expectedList.add(DFLY);
-//        expectedList.add(DPRESS);
-//        expectedList.add(DPULLO);
-//        expectedList.add(DRAISE);
-//        expectedList.add(DROW);
-//        expectedList.add(DSHPR);
-//
-//        testSession.whichWorkoutToAdd4(DEXT);
-//        testSession.whichWorkoutToAdd4(DFLY);
-//        testSession.whichWorkoutToAdd4(DPRESS);
-//        testSession.whichWorkoutToAdd4(DPULLO);
-//        testSession.whichWorkoutToAdd4(DRAISE);
-//        testSession.whichWorkoutToAdd4(DROW);
-//        testSession.whichWorkoutToAdd4(DSHPR);
-//
-//        for (Workout w : testSession.getQueue()) {
-//            assertTrue(expectedList.contains(w.getWorkoutName()));
-//        }
-//
-//    }
-//    @Test
-//    public void testWhichWorkoutToAdd5() {
-//        List<String> expectedList = new ArrayList<>();
-//        expectedList.add(DSHPR);
-//        expectedList.add(FPULL);
-//        expectedList.add(HMCURL);
-//        expectedList.add(HPREXT);
-//        expectedList.add(LMROW);
-//        expectedList.add(LATPD);
-//        expectedList.add(LGEXT);
-//
-//        testSession.whichWorkoutToAdd5(DSHPR);
-//        testSession.whichWorkoutToAdd5(FPULL);
-//        testSession.whichWorkoutToAdd5(HMCURL);
-//        testSession.whichWorkoutToAdd5(HPREXT);
-//        testSession.whichWorkoutToAdd5(LMROW);
-//        testSession.whichWorkoutToAdd5(LATPD);
-//        testSession.whichWorkoutToAdd5(LGEXT);
-//
-//        for (Workout w : testSession.getQueue()) {
-//            assertTrue(expectedList.contains(w.getWorkoutName()));
-//        }
-//
-//    }
-//    @Test
-//    public void testWhichWorkoutToAdd6() {
-//        List<String> expectedList = new ArrayList<>();
-//        expectedList.add(LGEXT);
-//        expectedList.add(LGRAISE);
-//        expectedList.add(LNG);
-//        expectedList.add(MTCLB);
-//        expectedList.add(PLUP);
-//        expectedList.add(PSUP);
-//        expectedList.add(RVDFLY);
-//
-//        testSession.whichWorkoutToAdd6(LGEXT);
-//        testSession.whichWorkoutToAdd6(LGRAISE);
-//        testSession.whichWorkoutToAdd6(LNG);
-//        testSession.whichWorkoutToAdd6(MTCLB);
-//        testSession.whichWorkoutToAdd6(PLUP);
-//        testSession.whichWorkoutToAdd6(PSUP);
-//        testSession.whichWorkoutToAdd6(RVDFLY);
-//
-//        for (Workout w : testSession.getQueue()) {
-//            assertTrue(expectedList.contains(w.getWorkoutName()));
-//        }
-//
-//    }
-//    @Test
-//    public void testWhichWorkoutToAdd7() {
-//        List<String> expectedList = new ArrayList<>();
-//        expectedList.add(RVDFLY);
-//        expectedList.add(RTWIST);
-//        expectedList.add(SCKICK);
-//        expectedList.add(STLGPRS);
-//        expectedList.add(STROW);
-//        expectedList.add(SUP);
-//        expectedList.add(UROW);
-//
-//        testSession.whichWorkoutToAdd7(RVDFLY);
-//        testSession.whichWorkoutToAdd7(RTWIST);
-//        testSession.whichWorkoutToAdd7(SCKICK);
-//        testSession.whichWorkoutToAdd7(STLGPRS);
-//        testSession.whichWorkoutToAdd7(STROW);
-//        testSession.whichWorkoutToAdd7(SUP);
-//        testSession.whichWorkoutToAdd7(UROW);
-//
-//        for (Workout w : testSession.getQueue()) {
-//            assertTrue(expectedList.contains(w.getWorkoutName()));
-//        }
-//
-//    }
+    @Test
+    public void testWhichWorkoutToAddNull(){
+        List<String> expectedList = new ArrayList<>();
+        testSession.addWorkout(whichWorkoutToAdd7("asdf"));
+        assertEquals(0, expectedList.size());
+    }
+
+    @Test
+    public void testWhichWorkoutToAdd() {
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add(BCURL);
+        expectedList.add(BPRESS);
+        expectedList.add(BROW);
+        expectedList.add(BSQUAT);
+        expectedList.add(BIKE);
+        expectedList.add(ELLPT);
+        expectedList.add(ROWING);
+
+        testSession.addWorkout(whichWorkoutToAdd(BCURL));
+        testSession.addWorkout(whichWorkoutToAdd(BPRESS));
+        testSession.addWorkout(whichWorkoutToAdd(BROW));
+        testSession.addWorkout(whichWorkoutToAdd(BSQUAT));
+        testSession.addWorkout(whichWorkoutToAdd(BIKE));
+        testSession.addWorkout(whichWorkoutToAdd(ELLPT));
+        testSession.addWorkout(whichWorkoutToAdd(ROWING));
+
+        for (Workout w : testSession.getQueue()) {
+            assertTrue(expectedList.contains(w.getWorkoutName()));
+        }
+
+    }
+
+    @Test
+    public void testWhichWorkoutToAdd2() {
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add(ROWING);
+        expectedList.add(TREAD);
+        expectedList.add(BICRUNCH);
+        expectedList.add(CCURL);
+        expectedList.add(CEXT);
+        expectedList.add(CFLY);
+        expectedList.add(CALFR);
+
+        testSession.addWorkout(whichWorkoutToAdd2(ROWING));
+        testSession.addWorkout(whichWorkoutToAdd2(TREAD));
+        testSession.addWorkout(whichWorkoutToAdd2(BICRUNCH));
+        testSession.addWorkout(whichWorkoutToAdd2(CCURL));
+        testSession.addWorkout(whichWorkoutToAdd2(CEXT));
+        testSession.addWorkout(whichWorkoutToAdd2(CFLY));
+        testSession.addWorkout(whichWorkoutToAdd2(CALFR));
+
+        for (Workout w : testSession.getQueue()) {
+            assertTrue(expectedList.contains(w.getWorkoutName()));
+        }
+
+    }
+
+    @Test
+    public void testWhichWorkoutToAdd3() {
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add(CALFR);
+        expectedList.add(CHTPRS);
+        expectedList.add(CHUP);
+        expectedList.add(CLEAN);
+        expectedList.add(DLIFT);
+        expectedList.add(DCURL);
+        expectedList.add(DEXT);
+
+        testSession.addWorkout(whichWorkoutToAdd3(CALFR));
+        testSession.addWorkout(whichWorkoutToAdd3(CHTPRS));
+        testSession.addWorkout(whichWorkoutToAdd3(CHUP));
+        testSession.addWorkout(whichWorkoutToAdd3(CLEAN));
+        testSession.addWorkout(whichWorkoutToAdd3(DLIFT));
+        testSession.addWorkout(whichWorkoutToAdd3(DCURL));
+        testSession.addWorkout(whichWorkoutToAdd3(DEXT));
+
+        for (Workout w : testSession.getQueue()) {
+            assertTrue(expectedList.contains(w.getWorkoutName()));
+        }
+
+    }
+
+    @Test
+    public void testWhichWorkoutToAdd4() {
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add(DEXT);
+        expectedList.add(DFLY);
+        expectedList.add(DPRESS);
+        expectedList.add(DPULLO);
+        expectedList.add(DRAISE);
+        expectedList.add(DROW);
+        expectedList.add(DSHPR);
+
+        testSession.addWorkout(whichWorkoutToAdd4(DEXT));
+        testSession.addWorkout(whichWorkoutToAdd4(DFLY));
+        testSession.addWorkout(whichWorkoutToAdd4(DPRESS));
+        testSession.addWorkout(whichWorkoutToAdd4(DPULLO));
+        testSession.addWorkout(whichWorkoutToAdd4(DRAISE));
+        testSession.addWorkout(whichWorkoutToAdd4(DROW));
+        testSession.addWorkout(whichWorkoutToAdd4(DSHPR));
+
+        for (Workout w : testSession.getQueue()) {
+            assertTrue(expectedList.contains(w.getWorkoutName()));
+        }
+
+    }
+
+    @Test
+    public void testWhichWorkoutToAdd5() {
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add(DSHPR);
+        expectedList.add(FPULL);
+        expectedList.add(HMCURL);
+        expectedList.add(HPREXT);
+        expectedList.add(LMROW);
+        expectedList.add(LATPD);
+        expectedList.add(LGEXT);
+
+        testSession.addWorkout(whichWorkoutToAdd5(DSHPR));
+        testSession.addWorkout(whichWorkoutToAdd5(FPULL));
+        testSession.addWorkout(whichWorkoutToAdd5(HMCURL));
+        testSession.addWorkout(whichWorkoutToAdd5(HPREXT));
+        testSession.addWorkout(whichWorkoutToAdd5(LMROW));
+        testSession.addWorkout(whichWorkoutToAdd5(LATPD));
+        testSession.addWorkout(whichWorkoutToAdd5(LGEXT));
+
+        for (Workout w : testSession.getQueue()) {
+            assertTrue(expectedList.contains(w.getWorkoutName()));
+        }
+
+    }
+
+    @Test
+    public void testWhichWorkoutToAdd6() {
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add(LGEXT);
+        expectedList.add(LGRAISE);
+        expectedList.add(LNG);
+        expectedList.add(MTCLB);
+        expectedList.add(PLUP);
+        expectedList.add(PSUP);
+        expectedList.add(RVDFLY);
+
+        testSession.addWorkout(whichWorkoutToAdd6(LGEXT));
+        testSession.addWorkout(whichWorkoutToAdd6(LGRAISE));
+        testSession.addWorkout(whichWorkoutToAdd6(LNG));
+        testSession.addWorkout(whichWorkoutToAdd6(MTCLB));
+        testSession.addWorkout(whichWorkoutToAdd6(PLUP));
+        testSession.addWorkout(whichWorkoutToAdd6(PSUP));
+        testSession.addWorkout(whichWorkoutToAdd6(RVDFLY));
+
+        for (Workout w : testSession.getQueue()) {
+            assertTrue(expectedList.contains(w.getWorkoutName()));
+        }
+
+    }
+
+    @Test
+    public void testWhichWorkoutToAdd7() {
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add(RVDFLY);
+        expectedList.add(RTWIST);
+        expectedList.add(SCKICK);
+        expectedList.add(STLGPRS);
+        expectedList.add(STROW);
+        expectedList.add(SUP);
+        expectedList.add(UROW);
+
+        testSession.addWorkout(whichWorkoutToAdd7(RVDFLY));
+        testSession.addWorkout(whichWorkoutToAdd7(RTWIST));
+        testSession.addWorkout(whichWorkoutToAdd7(SCKICK));
+        testSession.addWorkout(whichWorkoutToAdd7(STLGPRS));
+        testSession.addWorkout(whichWorkoutToAdd7(STROW));
+        testSession.addWorkout(whichWorkoutToAdd7(SUP));
+        testSession.addWorkout(whichWorkoutToAdd7(UROW));
+
+        for (Workout w : testSession.getQueue()) {
+            assertTrue(expectedList.contains(w.getWorkoutName()));
+        }
+
+    }
 
 
 }

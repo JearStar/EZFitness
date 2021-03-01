@@ -1,5 +1,8 @@
 package model;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -34,4 +37,17 @@ public abstract class CardioExercise extends Workout {
     public String getSummary() {
         return ("Time: " + getTime() + " minutes");
     }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("workoutName", this.workoutName);
+        List<Double> info = new ArrayList<>();
+
+        info.add(time);
+
+        json.put("info", info);
+        return json;
+    }
+
 }

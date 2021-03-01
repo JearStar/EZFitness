@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,5 +96,22 @@ public abstract class MuscleExercise extends Workout {
         finalString = "Sets: " + this.getSets() + "\nReps: " + reps + "\nWeights: " + weights;
         return finalString;
     }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("workoutName", this.workoutName);
+        List<Integer> info = new ArrayList<>();
+
+        info.add(sets);
+        for (int i = 0; i < sets; i++) {
+            info.add(reps.get(i));
+            info.add(weights.get(i));
+        }
+
+        json.put("info", info);
+        return json;
+    }
+
 
 }
