@@ -93,6 +93,7 @@ public class FitnessApp {
         System.out.println("Until next time!");
     }
 
+    //EFFECTS: handles user input on the viewing screen
     private void userInputsPastWorkouts() {
 
         boolean stillViewing = true;
@@ -102,12 +103,7 @@ public class FitnessApp {
         while (stillViewing) {
             String userCommand = input.nextLine().toLowerCase();
             if (pastLog.getPastSessionNames().contains(userCommand)) {
-                for (WorkoutSession ws : pastLog.getPastWorkoutSessions()) {
-                    if (userCommand.equals(ws.getSessionName())) {
-                        printWorkoutSummary(ws);
-                        break;
-                    }
-                }
+                pastLogsContainsSessionName(userCommand);
             } else if (userCommand.equals(DELETE_COMMAND)) {
                 deleteWorkoutSession();
             } else if (userCommand.equals(CLEAR_COMMAND)) {
@@ -118,6 +114,16 @@ public class FitnessApp {
                 stillViewing = true;
             } else {
                 System.out.println("Selection not valid...");
+            }
+        }
+    }
+
+    //EFFECTS: prints summary of a past workout given name of workout
+    private void pastLogsContainsSessionName(String s) {
+        for (WorkoutSession ws : pastLog.getPastWorkoutSessions()) {
+            if (s.equals(ws.getSessionName())) {
+                printWorkoutSummary(ws);
+                break;
             }
         }
     }
@@ -140,6 +146,7 @@ public class FitnessApp {
     }
 
 
+    //EFFECTS: prints view screen instructions
     private void printViewScreenInstructions() {
         System.out.println("\nTo view a past workout log, please enter the name of the workout session");
         System.out.println("To delete a past workout log, please enter '" + DELETE_COMMAND + "'");
@@ -225,6 +232,7 @@ public class FitnessApp {
         }
     }
 
+    //EFFECTS: asks for user input on workout details
     private void askForUserInput(Workout w, List<Double> infoList) {
         if (w instanceof MuscleExercise) {
 
@@ -323,6 +331,7 @@ public class FitnessApp {
         return result;
     }
 
+    //EFFECTS: saves the current workout session state
     private void saveCurrentWorkoutSession() {
         try {
             jsonWriterCurrent.open();
@@ -333,6 +342,7 @@ public class FitnessApp {
         }
     }
 
+    //EFFECTS: clears current workout session state
     private void clearCurrentSession() {
         try {
             jsonWriterCurrent.open();
@@ -343,6 +353,7 @@ public class FitnessApp {
         }
     }
 
+    //EFFECTS: loads workout session from memory
     private void loadWorkoutSession() {
         try {
             WorkoutSession loadable = jsonReaderCurrent.read();
@@ -357,6 +368,7 @@ public class FitnessApp {
         }
     }
 
+    //EFFECTS: loads past logs from memory
     private void loadPastLogs() {
         try {
             this.pastLog = jsonReaderPast.read();
@@ -367,6 +379,7 @@ public class FitnessApp {
         }
     }
 
+    //EFFECTS: overwrites the current past logs on memory
     private void overwritePastLogs() {
         try {
             jsonWriterPast.open();
@@ -378,6 +391,7 @@ public class FitnessApp {
     }
 
 
+    //EFFECTS: shows names of all past workout sessions
     private void showAllSessionNames() {
         if (pastLog.getPastSessionNames().size() != 0) {
             for (WorkoutSession ws : pastLog.getPastWorkoutSessions()) {
@@ -401,6 +415,7 @@ public class FitnessApp {
         displayMuscleGroups();
     }
 
+    //EFFECTS: displays all muscle groups
     private void displayMuscleGroups() {
         System.out.println("\t" + BI);
         System.out.println("\t" + TRI);

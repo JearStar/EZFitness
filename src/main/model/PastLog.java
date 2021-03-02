@@ -36,6 +36,8 @@ public class PastLog implements Writable {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: clears all workout sessions from pastWorkoutSessions
     public void clearAllWorkoutSessions() {
         Iterator<WorkoutSession> i = pastWorkoutSessions.iterator();
         while (i.hasNext()) {
@@ -46,6 +48,8 @@ public class PastLog implements Writable {
     }
 
 
+    //MODIFIES: this
+    //EFFECTS: returns a list of all session names
     public List<String> getPastSessionNames() {
         List<String> pastNames = new ArrayList<>();
         for (WorkoutSession ws : getPastWorkoutSessions()) {

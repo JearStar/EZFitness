@@ -37,10 +37,13 @@ public class WorkoutSession implements Writable {
         sessionName = dtf.format(now);
     }
 
+    //MODIFIES: this
+    //EFFECTS: sets the session name
     public void setSessionName(String name) {
         this.sessionName = name;
     }
 
+    //EFFECTS: returns the session name
     public String getSessionName() {
         return this.sessionName;
     }
@@ -93,7 +96,7 @@ public class WorkoutSession implements Writable {
         this.queue = queue.subList(1, queue.size());
     }
 
-    //EFFECTS: returns this workout session as a JSONObject
+    //EFFECTS: returns this workout session as a JSON Object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
@@ -125,8 +128,7 @@ public class WorkoutSession implements Writable {
         return jsonArray;
     }
 
-    //MODIFIES: queue
-    //EFFECTS: will a new workout to queue given the name of a workout. Part 1 of 7 because i have approx. 40 cases.
+    //EFFECTS: will return new workout given the name of a workout. Part 1 of 7 because i have approx. 40 cases
     public static Workout whichWorkoutToAdd(String n) {
         n = n.toLowerCase();
         if (n.equals(BCURL.toLowerCase())) {
@@ -146,8 +148,7 @@ public class WorkoutSession implements Writable {
         }
     }
 
-    //MODIFIES: queue
-    //EFFECTS: will a new workout to queue given the name of a workout. Part 2 of 7 because i have approx. 40 cases.
+    //EFFECTS: will return new workout given the name of a workout. Part 2 of 7 because i have approx. 40 cases
     protected static Workout whichWorkoutToAdd2(String n) {
         n = n.toLowerCase();
         if (n.equals(ROWING.toLowerCase())) {
@@ -167,8 +168,7 @@ public class WorkoutSession implements Writable {
         }
     }
 
-    //MODIFIES: queue
-    //EFFECTS: will a new workout to queue given the name of a workout. Part 3 of 7 because i have approx. 40 cases.
+    //EFFECTS: will return new workout given the name of a workout. Part 3 of 7 because i have approx. 40 cases
     protected static Workout whichWorkoutToAdd3(String n) {
         n = n.toLowerCase();
         if (n.equals(CALFR.toLowerCase())) {
@@ -188,8 +188,7 @@ public class WorkoutSession implements Writable {
         }
     }
 
-    //MODIFIES: queue
-    //EFFECTS: will a new workout to queue given the name of a workout. Part 4 of 7 because i have approx. 40 cases.
+    //EFFECTS: will return new workout given the name of a workout. Part 4 of 7 because i have approx. 40 cases
     protected static Workout whichWorkoutToAdd4(String n) {
         n = n.toLowerCase();
         if (n.equals(DEXT.toLowerCase())) {
@@ -210,8 +209,7 @@ public class WorkoutSession implements Writable {
 
     }
 
-    //MODIFIES: queue
-    //EFFECTS: will a new workout to queue given the name of a workout. Part 5 of 7 because i have approx. 40 cases.
+    //EFFECTS: will return new workout given the name of a workout. Part 5 of 7 because i have approx. 40 cases
     protected static Workout whichWorkoutToAdd5(String n) {
         n = n.toLowerCase();
         if (n.equals(DSHPR.toLowerCase())) {
@@ -231,8 +229,7 @@ public class WorkoutSession implements Writable {
         }
     }
 
-    //MODIFIES: queue
-    //EFFECTS: will a new workout to queue given the name of a workout. Part 6 of 7 because i have approx. 40 cases.
+    //EFFECTS: will return new workout given the name of a workout. Part 6 of 7 because i have approx. 40 cases
     protected static Workout whichWorkoutToAdd6(String n) {
         n = n.toLowerCase();
         if (n.equals(LGEXT.toLowerCase())) {
@@ -253,8 +250,7 @@ public class WorkoutSession implements Writable {
 
     }
 
-    //MODIFIES: queue
-    //EFFECTS: will a new workout to queue given the name of a workout. Part 7 of 7 because i have approx. 40 cases.
+    //EFFECTS: will return new workout given the name of a workout. Part 7 of 7 because i have approx. 40 cases
     protected static Workout whichWorkoutToAdd7(String n) {
         n = n.toLowerCase();
         if (n.equals(RVDFLY.toLowerCase())) {

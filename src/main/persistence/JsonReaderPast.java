@@ -28,7 +28,7 @@ public class JsonReaderPast {
     public PastLog read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
-        return parsePastWorkoutSessions(jsonObject);
+        return parsePastLog(jsonObject);
     }
 
     //EFFECTS: reads source file as string and returns it
@@ -41,8 +41,9 @@ public class JsonReaderPast {
         return contentBuilder.toString();
     }
 
-    //EFFECTS: parses workroom from JSON object and returns it
-    private PastLog parsePastWorkoutSessions(JSONObject jsonObject) {
+    //MODIFIES: pl
+    //EFFECTS: parses pastLog from JSON object and returns it
+    private PastLog parsePastLog(JSONObject jsonObject) {
         JSONArray pastLogs = jsonObject.getJSONArray("pastWorkoutSessions");
         PastLog pl = new PastLog();
 
@@ -56,7 +57,8 @@ public class JsonReaderPast {
     }
 
 
-    //EFFECTS: parses workroom from JSON object and returns it
+    //MODIFIES: ws
+    //EFFECTS: parses WorkoutSession from JSON object and returns it
     private WorkoutSession parseWorkoutSession(JSONObject jsonObject) {
         String sessionName = jsonObject.getString("sessionName");
         WorkoutSession ws = new WorkoutSession();
@@ -65,9 +67,10 @@ public class JsonReaderPast {
         return ws;
     }
 
+    //MODIFIES: ws
+    //EFFECTS: reads finished list from memory and adds it to session
     private void addListsToSession(WorkoutSession ws, JSONObject jsonObject) {
         JSONArray finishedList = jsonObject.getJSONArray("finishedList");
-        JSONArray remainingList = jsonObject.getJSONArray("remainingList");
 
         for (Object json : finishedList) {
             JSONObject nextWorkout = (JSONObject) json;
@@ -75,6 +78,8 @@ public class JsonReaderPast {
         }
     }
 
+    //MODIFIES: ws
+    //EFFECTS: reads finished workout from memory and adds it to finishedList
     private void addFinishedWorkout(WorkoutSession ws, JSONObject jsonObject) {
         String workoutName = jsonObject.getString("workoutName");
         List<Double> infoList = new ArrayList<>();

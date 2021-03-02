@@ -43,6 +43,7 @@ public class JsonReaderCurrent {
     }
 
 
+    //MODIFIES: ws
     //EFFECTS: parses workroom from JSON object and returns it
     private WorkoutSession parseWorkoutSession(JSONObject jsonObject) {
         String sessionName = jsonObject.getString("sessionName");
@@ -52,6 +53,8 @@ public class JsonReaderCurrent {
         return ws;
     }
 
+    //MODIFIES: ws
+    //EFFECTS: adds finishedList and remainingList from memory
     private void addListsToSession(WorkoutSession ws, JSONObject jsonObject) {
         JSONArray finishedList = jsonObject.getJSONArray("finishedList");
         JSONArray remainingList = jsonObject.getJSONArray("remainingList");
@@ -67,6 +70,8 @@ public class JsonReaderCurrent {
         }
     }
 
+    //MODIFIES: ws
+    //EFFECTS: reads workout from finished list from memory and adds it to final list
     private void addFinishedWorkout(WorkoutSession ws, JSONObject jsonObject) {
         String workoutName = jsonObject.getString("workoutName");
         List<Double> infoList = new ArrayList<>();
@@ -84,6 +89,8 @@ public class JsonReaderCurrent {
         ws.addToFinalList(currentWorkout);
     }
 
+    //MODIFIES: ws
+    //EFFECTS: reads workout from remaining list from memory and adds it to queue
     private void addRemainingWorkout(WorkoutSession ws, JSONObject jsonObject) {
         String workoutName = jsonObject.getString("workoutName");
         ws.addWorkout(whichWorkoutToAdd(workoutName));

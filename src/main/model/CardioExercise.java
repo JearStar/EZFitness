@@ -38,6 +38,7 @@ public abstract class CardioExercise extends Workout {
         return ("Time: " + getTime() + " minutes");
     }
 
+    //EFFECTS: returns cardio exercise converted to a JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

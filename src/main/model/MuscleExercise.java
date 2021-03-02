@@ -97,6 +97,7 @@ public abstract class MuscleExercise extends Workout {
         return finalString;
     }
 
+    //EFFECTS: returns this muscle exercise as a converted JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
