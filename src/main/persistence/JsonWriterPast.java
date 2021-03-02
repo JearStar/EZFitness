@@ -1,18 +1,18 @@
 package persistence;
 
-import model.WorkoutSession;
+import model.PastLog;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
-public class JsonWriter {
+public class JsonWriterPast {
     private PrintWriter writer;
     private String destination;
 
     //EFFECTS: constructs writer to write to destination file
-    public JsonWriter(String destination) {
+    public JsonWriterPast(String destination) {
         this.destination = destination;
     }
 
@@ -24,8 +24,8 @@ public class JsonWriter {
 
     //MODIFIES: this
     //EFFECTS: writes JSON representation of workroom to file
-    public void write(WorkoutSession ws) {
-        JSONObject json = ws.toJson();
+    public void write(PastLog pl) {
+        JSONObject json = pl.toJson();
         saveToFile(json.toString());
     }
 

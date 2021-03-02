@@ -7,10 +7,13 @@ import listofexercises.cardioexercises.RowingMachine;
 import listofexercises.cardioexercises.TreadMill;
 import listofexercises.muscleexercises.*;
 import model.MuscleExercise;
+import model.PastLog;
 import model.Workout;
 import model.WorkoutSession;
-import persistence.JsonReader;
-import persistence.JsonWriter;
+import persistence.JsonReaderCurrent;
+import persistence.JsonReaderPast;
+import persistence.JsonWriterCurrent;
+import persistence.JsonWriterPast;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,16 +42,20 @@ public class FitnessApp {
     public static final String BACK_DAY_COMMAND = "Back Day";
     public static final String LOAD_COMMAND = "load";
     public static final String VIEW_PAST_WORKOUTS_COMMAND = "view";
+    public static final String DELETE_COMMAND = "delete";
+    public static final String CLEAR_COMMAND = "clear";
+    public static final String GO_BACK_COMMAND = "back";
 
     private static final String SESSION_STORE = "./data/currentsession.json";
     private static final String LOGS_STORE = "./data/pastlogs.json";
     private static final Scanner input = new Scanner(System.in);
-    private JsonWriter jsonWriterCurrent = new JsonWriter(SESSION_STORE);
-    private JsonReader jsonReaderCurrent = new JsonReader(SESSION_STORE);
-    private JsonWriter jsonWriterPast = new JsonWriter(LOGS_STORE);
-    private JsonReader jsonReaderPast = new JsonReader(LOGS_STORE);
+    private JsonWriterCurrent jsonWriterCurrent = new JsonWriterCurrent(SESSION_STORE);
+    private JsonReaderCurrent jsonReaderCurrent = new JsonReaderCurrent(SESSION_STORE);
+    private JsonWriterPast jsonWriterPast = new JsonWriterPast(LOGS_STORE);
+    private JsonReaderPast jsonReaderPast = new JsonReaderPast(LOGS_STORE);
     List<Workout> selectionList = new ArrayList<>();
-    WorkoutSession session;
+    WorkoutSession session = new WorkoutSession();
+    PastLog pastLog = new PastLog();
 
 
     //EFFECTS: runs fitness application
@@ -72,6 +79,8 @@ public class FitnessApp {
 
             if (command.equals(QUIT_COMMAND)) {
                 keepGoing = false;
+            } else if (command.equals(VIEW_PAST_WORKOUTS_COMMAND)) {
+                userInputsPastWorkouts();
             } else if (command.equals(LOAD_COMMAND)) {
                 loadWorkoutSession();
                 proceedAfterAddingExercise();
@@ -82,6 +91,61 @@ public class FitnessApp {
             }
         }
         System.out.println("Until next time!");
+    }
+
+    private void userInputsPastWorkouts() {
+
+        boolean stillViewing = true;
+        printViewScreenInstructions();
+        loadPastLogs();
+
+        while (stillViewing) {
+            String userCommand = input.nextLine().toLowerCase();
+            if (pastLog.getPastSessionNames().contains(userCommand)) {
+                for (WorkoutSession ws : pastLog.getPastWorkoutSessions()) {
+                    if (userCommand.equals(ws.getSessionName())) {
+                        printWorkoutSummary(ws);
+                        break;
+                    }
+                }
+            } else if (userCommand.equals(DELETE_COMMAND)) {
+                deleteWorkoutSession();
+            } else if (userCommand.equals(CLEAR_COMMAND)) {
+                clearAllWorkoutSessions();
+            } else if (userCommand.equals(GO_BACK_COMMAND)) {
+                stillViewing = false;
+            } else if (userCommand.equals("")) {
+                stillViewing = true;
+            } else {
+                System.out.println("Selection not valid...");
+            }
+        }
+    }
+
+    //MODIFIES: session
+    //EFFECTS: gets user input to delete a workout from queue
+    private void deleteWorkoutSession() {
+        System.out.println("Please enter name of the workout session to delete");
+        pastLog.removeWorkoutSession(input.nextLine().toLowerCase());
+        overwritePastLogs();
+        showAllSessionNames();
+    }
+
+    //MODIFIES: session
+    //EFFECTS: gets user input to delete a workout from queue
+    private void clearAllWorkoutSessions() {
+        pastLog.clearAllWorkoutSessions();
+        overwritePastLogs();
+        showAllSessionNames();
+    }
+
+
+    private void printViewScreenInstructions() {
+        System.out.println("\nTo view a past workout log, please enter the name of the workout session");
+        System.out.println("To delete a past workout log, please enter '" + DELETE_COMMAND + "'");
+        System.out.println("To delete all workout logs, please enter '" + CLEAR_COMMAND + "'");
+        System.out.println("To go back to the main menu, please enter '" + GO_BACK_COMMAND + "'");
+        System.out.println("\t");
     }
 
     //EFFECTS: displays the title screen
@@ -97,18 +161,25 @@ public class FitnessApp {
 
     //EFFECTS: instantiates a new workout session where users can then change view, start exercises, or begin workout
     private void doWorkoutSession() {
-        session = new WorkoutSession();
+        this.session = new WorkoutSession();
         boolean stillAddingExercises = true;
         printSelectionScreenInstructions();
         while (stillAddingExercises) {
             String c = input.nextLine().toLowerCase();
             if (c.equals(BEGIN_WORKOUT_COMMAND)) {
+                if (session.getQueue().size() != 0) {
+                    proceedAfterAddingExercise();
+                } else {
+                    System.out.println("There were no workouts added to queue. Returning to main menu.");
+                }
+                stillAddingExercises = false;
+            } else if (c.equals(GO_BACK_COMMAND)) {
                 stillAddingExercises = false;
             } else {
                 handleOtherUserInputs(c);
             }
         }
-        proceedAfterAddingExercise();
+
     }
 
     //EFFECTS: handles user input on selection screen
@@ -118,9 +189,9 @@ public class FitnessApp {
         } else if (isEqualToWorkoutSelection(c)) {
             session.addWorkout(whichWorkoutToAdd(c));
             printCurrentSelections();
-        } else if (c.equals("delete")) {
-            deleteWorkOut();
-        } else if (c.equals("clear")) {
+        } else if (c.equals(DELETE_COMMAND)) {
+            deleteWorkout();
+        } else if (c.equals(CLEAR_COMMAND)) {
             clearAllWorkouts();
         } else if (isEqualToPresetListSelection(c)) {
             session.choosePresetList(c);
@@ -132,9 +203,15 @@ public class FitnessApp {
 
     //EFFECTS: methods to run after exercise-adding has been completed
     private void proceedAfterAddingExercise() {
-        beginWorkout(session);
-        printWorkoutSummary();
+        if (!(session.getQueue().isEmpty())) {
+            beginWorkout(session);
+            printWorkoutSummary(session);
+            pastLog.addSession(this.session);
+            overwritePastLogs();
+            clearCurrentSession();
+        }
     }
+
 
     //EFFECTS: begins the workout
     private void beginWorkout(WorkoutSession ws) {
@@ -189,7 +266,7 @@ public class FitnessApp {
 
     //MODIFIES: session
     //EFFECTS: gets user input to delete a workout from queue
-    private void deleteWorkOut() {
+    private void deleteWorkout() {
         System.out.println("Please enter name of workout to delete");
         session.removeWorkout(input.nextLine().toLowerCase());
         printCurrentSelections();
@@ -207,9 +284,9 @@ public class FitnessApp {
     }
 
     //EFFECTS: prints the workout summary of this session
-    private void printWorkoutSummary() {
+    private void printWorkoutSummary(WorkoutSession workoutSession) {
         System.out.println("Workout Summary:");
-        for (Workout w : session.getFinishedList()) {
+        for (Workout w : workoutSession.getFinishedList()) {
             System.out.println("\n" + w.getWorkoutName());
             System.out.println(w.getSummary());
         }
@@ -252,26 +329,79 @@ public class FitnessApp {
             jsonWriterCurrent.write(session);
             jsonWriterCurrent.close();
         } catch (FileNotFoundException e) {
-            System.out.println("failed");
+            System.out.println("could not find file");
+        }
+    }
+
+    private void clearCurrentSession() {
+        try {
+            jsonWriterCurrent.open();
+            jsonWriterCurrent.write(new WorkoutSession());
+            jsonWriterCurrent.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("could not find file");
         }
     }
 
     private void loadWorkoutSession() {
         try {
-            this.session = jsonReaderCurrent.read();
-            System.out.println("Loaded session from " + session.getSessionName());
+            WorkoutSession loadable = jsonReaderCurrent.read();
+            if (loadable.getQueue().size() != 0) {
+                this.session = loadable;
+                System.out.println("Loaded session from " + session.getSessionName());
+            } else {
+                System.out.println("No sessions currently in progress");
+            }
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + SESSION_STORE);
         }
     }
+
+    private void loadPastLogs() {
+        try {
+            this.pastLog = jsonReaderPast.read();
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + LOGS_STORE);
+        } finally {
+            showAllSessionNames();
+        }
+    }
+
+    private void overwritePastLogs() {
+        try {
+            jsonWriterPast.open();
+            jsonWriterPast.write(pastLog);
+            jsonWriterPast.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("failed");
+        }
+    }
+
+
+    private void showAllSessionNames() {
+        if (pastLog.getPastSessionNames().size() != 0) {
+            for (WorkoutSession ws : pastLog.getPastWorkoutSessions()) {
+                System.out.println(ws.getSessionName());
+            }
+        } else {
+            System.out.println("\nNo past workout sessions");
+        }
+    }
+
 
     //EFFECTS: prints instructions as well as all workouts
     private void printSelectionScreenInstructions() {
         System.out.println("Type in the name of the exercise or one of '" + LEG_DAY_COMMAND + "' or '"
                 + CHEST_DAY_COMMAND + "' or '" + ARM_DAY_COMMAND + "' or '" + SHOULDER_DAY_COMMAND + "' or '"
                 + ABS_DAY_COMMAND + "' or '" + BACK_DAY_COMMAND + "' to add it to your workout session");
-        System.out.println("Once you are satisfied with your list, simply type 'start' to being your workout");
+        System.out.println("Once you are satisfied with your list, enter '" + BEGIN_WORKOUT_COMMAND + "' to being your "
+                + "workout");
+        System.out.println("To delete an exercise from your list, please enter '" + DELETE_COMMAND + "'");
         System.out.println("To view exercises, please enter one of the following muscle groups:");
+        displayMuscleGroups();
+    }
+
+    private void displayMuscleGroups() {
         System.out.println("\t" + BI);
         System.out.println("\t" + TRI);
         System.out.println("\t" + FDELTS);

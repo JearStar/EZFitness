@@ -10,8 +10,7 @@ import java.util.List;
 
 import static model.Workout.*;
 import static model.WorkoutSession.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static ui.FitnessApp.*;
 
 public class WorkoutSessionTest {
@@ -20,6 +19,38 @@ public class WorkoutSessionTest {
     @BeforeEach
     public void setup() {
         testSession = new WorkoutSession();
+    }
+
+    @Test
+    public void testSetAndGetSessionName() {
+        testSession.setSessionName("testName");
+        assertEquals("testName", testSession.getSessionName());
+    }
+
+    @Test
+    public void testRemoveFirstOfQueue(){
+        Bicycle testBicycle = new Bicycle();
+        Deadlift testDeadlift = new Deadlift();
+        testSession.addWorkout(testBicycle);
+        testSession.addWorkout(testDeadlift);
+        assertEquals(2, testSession.getQueue().size());
+        assertEquals("Bicycle", testSession.getQueue().get(0).getWorkoutName());
+        assertEquals("Deadlift", testSession.getQueue().get(1).getWorkoutName());
+        testSession.removeFirstOfQueue();
+        assertEquals(1, testSession.getQueue().size());
+        assertEquals("Deadlift", testSession.getQueue().get(0).getWorkoutName());
+        assertFalse(testSession.getQueue().contains(testBicycle));
+    }
+
+    @Test
+    public void testGetFinishedList(){
+        Bicycle testBicycle = new Bicycle();
+        Deadlift testDeadlift = new Deadlift();
+        testSession.addToFinalList(testBicycle);
+        testSession.addWorkout(testDeadlift);
+        assertEquals(testBicycle, testSession.getFinishedList().get(0));
+        assertEquals(1, testSession.getFinishedList().size());
+
     }
 
     @Test

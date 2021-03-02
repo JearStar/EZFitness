@@ -1,5 +1,6 @@
 package persistence;
 
+import model.PastLog;
 import model.Workout;
 import model.WorkoutSession;
 import org.json.JSONArray;
@@ -15,21 +16,19 @@ import java.util.stream.Stream;
 
 import static model.WorkoutSession.whichWorkoutToAdd;
 
-// A reader that reads WorkoutSession from JSON data stored in file
-public class JsonReader {
-    private String source;
+public class JsonReaderPast {
+    String source;
 
-    //EFFECTS: constructs a reader to read from source file
-    public JsonReader(String source) {
+    public JsonReaderPast(String source) {
         this.source = source;
     }
 
     //EFFECTS: reads WorkoutSession from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public WorkoutSession read() throws IOException {
+    public PastLog read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
-        return parseWorkoutSession(jsonObject);
+        return parsePastWorkoutSessions(jsonObject);
     }
 
     //EFFECTS: reads source file as string and returns it
@@ -40,6 +39,20 @@ public class JsonReader {
             stream.forEach(s -> contentBuilder.append(s));
         }
         return contentBuilder.toString();
+    }
+
+    //EFFECTS: parses workroom from JSON object and returns it
+    private PastLog parsePastWorkoutSessions(JSONObject jsonObject) {
+        JSONArray pastLogs = jsonObject.getJSONArray("pastWorkoutSessions");
+        PastLog pl = new PastLog();
+
+        for (Object json : pastLogs) {
+            JSONObject nextWorkoutSession = (JSONObject) json;
+            WorkoutSession session = parseWorkoutSession(nextWorkoutSession);
+            pl.addSession(session);
+        }
+
+        return pl;
     }
 
 
@@ -60,11 +73,6 @@ public class JsonReader {
             JSONObject nextWorkout = (JSONObject) json;
             addFinishedWorkout(ws, nextWorkout);
         }
-
-        for (Object json : remainingList) {
-            JSONObject nextWorkout = (JSONObject) json;
-            addRemainingWorkout(ws, nextWorkout);
-        }
     }
 
     private void addFinishedWorkout(WorkoutSession ws, JSONObject jsonObject) {
@@ -83,10 +91,4 @@ public class JsonReader {
 
         ws.addToFinalList(currentWorkout);
     }
-
-    private void addRemainingWorkout(WorkoutSession ws, JSONObject jsonObject) {
-        String workoutName = jsonObject.getString("workoutName");
-        ws.addWorkout(whichWorkoutToAdd(workoutName));
-    }
-
 }
