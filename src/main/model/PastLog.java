@@ -47,6 +47,19 @@ public class PastLog implements Writable {
         }
     }
 
+    //REQUIRES: session name is a name of workout session that is in the list
+    //EFFECTS: returns a workout session given session name
+    public WorkoutSession findWorkoutSession(String sessionName) {
+        WorkoutSession result = null;
+        for (WorkoutSession ws : pastWorkoutSessions) {
+            if (ws.getSessionName().equals(sessionName)) {
+                result = ws;
+                break;
+            }
+        }
+        return result;
+    }
+
 
     //MODIFIES: this
     //EFFECTS: returns a list of all session names

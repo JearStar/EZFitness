@@ -85,6 +85,15 @@ public class WorkoutSession implements Writable {
         }
     }
 
+    public String getSessionSummary() {
+        String result = "";
+        for (Workout w : this.finishedList) {
+            result += ("\n" + w.getWorkoutName() + "\n" + w.getSummary() + "\n");
+        }
+        return result;
+
+    }
+
     //EFFECTS: adds a workout to the finishedList
     public void addToFinalList(Workout w) {
         finishedList.add(w);

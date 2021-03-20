@@ -15,6 +15,10 @@ import persistence.JsonReaderPast;
 import persistence.JsonWriterCurrent;
 import persistence.JsonWriterPast;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ import static model.WorkoutSession.whichWorkoutToAdd;
  * Fitness app class that combines user interface and classes in model
  */
 
-public class FitnessApp {
+public class FitnessApp extends JFrame {
     public static final String APP_NAME = "EZ Fitness";
     public static final String WORKOUT_SESSION_COMMAND = "start";
     public static final String QUIT_COMMAND = "quit";
@@ -45,6 +49,15 @@ public class FitnessApp {
     public static final String DELETE_COMMAND = "delete";
     public static final String CLEAR_COMMAND = "clear";
     public static final String GO_BACK_COMMAND = "back";
+    public static final int WIDTH = 900;
+    public static final int HEIGHT = 500;
+    public static final String TITLE_SCREEN_LABEL = "Menu";
+    public static final String VIEWING_TAB_LABEL = "View Past Logs";
+    public static final String ADDING_TAB_LABEL = "Workout Session";
+    public static final int TITLE_SCREEN_INDEX = 0;
+    public static final int VIEWING_TAB_INDEX = 1;
+    public static final int ADDING_TAB_INDEX = 2;
+    private JTabbedPane sidebar;
 
     private static final String SESSION_STORE = "./data/currentsession.json";
     private static final String LOGS_STORE = "./data/pastlogs.json";
@@ -56,11 +69,249 @@ public class FitnessApp {
     List<Workout> selectionList = new ArrayList<>();
     WorkoutSession session = new WorkoutSession();
     PastLog pastLog = new PastLog();
+    JPanel viewingTab = new JPanel();
+    JPanel titleScreen = new JPanel(new BorderLayout());
+    JPanel addingTab = new JPanel(new BorderLayout());
+    JComboBox<String> comboBox = new JComboBox<>();
+    JComboBox<String> muscleGroupDropDown = new JComboBox<>();
+    JComboBox<String> exerciseDropDown = new JComboBox<>();
+    JPanel viewingTabTopPanel = new JPanel();
+    JTextArea summaryField = new JTextArea();
+    JTextArea queueScreen = new JTextArea();
+    JPanel centerOfPagePanel = new JPanel();
+    JButton newSessionButton = new JButton("New Session");
+    JButton loadSessionButton = new JButton("Load Previous Session");
+    JPanel titleCentralPanel = new JPanel();
+    JButton toViewingScreenButton = new JButton(VIEWING_TAB_LABEL);
+    JButton toAddingScreenButton = new JButton(ADDING_TAB_LABEL);
 
+    public static void main(String[] args) {
+        new FitnessApp();
+    }
 
     //EFFECTS: runs fitness application
     public FitnessApp() {
+        initSelectionList1();
+        initSelectionList2();
+        this.setTitle(APP_NAME);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setSize(WIDTH, HEIGHT);
+        sidebar = new JTabbedPane();
+
+        loadTabs();
+        add(sidebar);
+
+        this.setVisible(true);
         runFitnessApp();
+    }
+
+    public void loadTabs() {
+        loadTitleTab();
+        loadViewingTab();
+        loadAddingTab();
+    }
+
+    public void loadTitleTab() {
+        titleCentralPanel.setBackground(new Color(129, 121, 141));
+        titleCentralPanel.setLayout(null);
+        JLabel titleScreenLabel = new JLabel(TITLE_SCREEN_LABEL);
+        titleScreenLabel.setBounds(WIDTH / 4, HEIGHT / 8 * 1, WIDTH / 2, HEIGHT / 10);
+        titleScreenLabel.setHorizontalAlignment(JLabel.CENTER);
+        titleCentralPanel.add(titleScreenLabel, BorderLayout.PAGE_START);
+        titleScreen.add(titleCentralPanel);
+        addTitleScreenButtons(titleScreen);
+        sidebar.add(titleScreen, TITLE_SCREEN_INDEX);
+        sidebar.setTitleAt(TITLE_SCREEN_INDEX, TITLE_SCREEN_LABEL);
+    }
+
+    public void addTitleScreenButtons(JPanel titleScreen) {
+        toViewingScreenButton.setBounds(WIDTH / 4, HEIGHT / 8 * 2, WIDTH / 2, HEIGHT / 10);
+        toAddingScreenButton.setBounds(WIDTH / 4, HEIGHT / 8 * 4, WIDTH / 2, HEIGHT / 10);
+        titleCentralPanel.add(toViewingScreenButton, BorderLayout.CENTER);
+        titleCentralPanel.add(toAddingScreenButton, BorderLayout.CENTER);
+
+        toAddingScreenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String buttonPressed = e.getActionCommand();
+                if (buttonPressed.equals(ADDING_TAB_LABEL)) {
+                    sidebar.setSelectedIndex(ADDING_TAB_INDEX);
+                }
+            }
+        });
+
+        toViewingScreenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String buttonPressed = e.getActionCommand();
+                if (buttonPressed.equals(VIEWING_TAB_LABEL)) {
+                    sidebar.setSelectedIndex(VIEWING_TAB_INDEX);
+                }
+            }
+        });
+    }
+
+    public void loadViewingTab() {
+        JLabel viewingTabLabel = new JLabel("Viewing Tab");
+        viewingTab.add(viewingTabLabel, TOP_ALIGNMENT);
+        viewingTab.setLayout(new BorderLayout());
+        addViewingTabDeleteButton();
+        addViewingTabClearButton();
+        addViewingTabDropDownList();
+        viewingTab.add(viewingTabTopPanel, BorderLayout.PAGE_START);
+        sidebar.add(viewingTab, VIEWING_TAB_INDEX);
+        sidebar.setTitleAt(VIEWING_TAB_INDEX, VIEWING_TAB_LABEL);
+    }
+
+    public void addViewingTabDeleteButton() {
+        JButton deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (confirmAction()) {
+                    String sessionName = (String) comboBox.getSelectedItem();
+                    pastLog.removeWorkoutSession(sessionName);
+                    updateComboBox();
+                }
+            }
+        });
+        viewingTabTopPanel.add(deleteButton);
+    }
+
+    public void addViewingTabClearButton() {
+        JButton clearButton = new JButton("Clear");
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (confirmAction()) {
+                    clearAllWorkoutSessions();
+                    updateComboBox();
+                    summaryField.setText("");
+                }
+            }
+        });
+        viewingTabTopPanel.add(clearButton);
+    }
+
+    public boolean confirmAction() {
+        int input = JOptionPane.showConfirmDialog(null,
+                "Please confirm action", "Confirm action", JOptionPane.YES_NO_OPTION);
+        if (input == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void updateComboBox() {
+        DefaultComboBoxModel model = new DefaultComboBoxModel(pastLog.getPastSessionNames().toArray());
+        comboBox.setModel(model);
+    }
+
+    public void addViewingTabDropDownList() {
+        JScrollPane scrollPane = new JScrollPane(summaryField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        loadPastLogsIntoDropDown();
+        viewingTabTopPanel.add(comboBox);
+        viewingTab.add(scrollPane);
+        summaryField.setEditable(false);
+        summaryField.setBackground(new Color(88, 92, 125));
+        viewingTabTopPanel.setBackground(new Color(120, 134, 154));
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String logName = (String) comboBox.getSelectedItem();
+                summaryField.setText(pastLog.findWorkoutSession(logName).getSessionSummary());
+            }
+        });
+    }
+
+    public void loadPastLogsIntoDropDown() {
+        try {
+            this.pastLog = jsonReaderPast.read();
+        } catch (IOException e) {
+            // Handle Exception
+        } finally {
+            for (WorkoutSession ws : pastLog.getPastWorkoutSessions()) {
+                comboBox.addItem(ws.getSessionName());
+            }
+        }
+    }
+
+    public void loadAddingTab() {
+        JPanel topOfPagePanel = new JPanel();
+        sidebar.add(addingTab, ADDING_TAB_INDEX);
+        sidebar.setTitleAt(ADDING_TAB_INDEX, ADDING_TAB_LABEL);
+
+        topOfPagePanel.add(newSessionButton);
+        topOfPagePanel.add(loadSessionButton);
+        addingTab.add(topOfPagePanel, BorderLayout.PAGE_START);
+        addLowerHalfPanelAdding();
+//        centerOfPagePanel.setVisible(false);
+        initializeDropDowns();
+    }
+
+    public void addLowerHalfPanelAdding() {
+        centerOfPagePanel.setLayout(null);
+        JLabel muscleGroupLabel = new JLabel("Muscle Groups");
+        muscleGroupLabel.setBounds(WIDTH / 20, HEIGHT / 16 * 1, WIDTH / 10 * 1, HEIGHT / 32);
+        JLabel exerciseLabel = new JLabel("Exercises");
+        exerciseLabel.setBounds(WIDTH / 20, HEIGHT / 16 * 8, WIDTH / 10 * 1, HEIGHT / 32);
+        muscleGroupDropDown.setBounds(WIDTH / 20, HEIGHT / 16 * 2, WIDTH / 10 * 2, HEIGHT / 20);
+        exerciseDropDown.setBounds(WIDTH / 20, HEIGHT / 16 * 9, WIDTH / 10 * 2, HEIGHT / 20);
+        JScrollPane scrollPane = new JScrollPane(queueScreen, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        queueScreen.setEditable(false);
+        scrollPane.setBounds(WIDTH / 20 * 10, HEIGHT / 16 * 1, WIDTH / 10 * 4, HEIGHT / 20 * 12);
+        centerOfPagePanel.add(muscleGroupLabel);
+        centerOfPagePanel.add(exerciseLabel);
+        centerOfPagePanel.add(muscleGroupDropDown);
+        centerOfPagePanel.add(exerciseDropDown);
+        centerOfPagePanel.add(scrollPane);
+        addingTab.add(centerOfPagePanel);
+    }
+
+    public void initializeDropDowns() {
+        initializeMuscleGroupDropDown();
+        initializeExerciseDropDown();
+        setActionListenerMuscleGroupDropDown();
+    }
+
+    public void setActionListenerMuscleGroupDropDown() {
+        muscleGroupDropDown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                initializeExerciseDropDown();
+            }
+        });
+    }
+
+    public void initializeMuscleGroupDropDown() {
+        List<String> muscleGroups = new ArrayList<>();
+        for (Workout w : selectionList) {
+            for (String mg : w.getMuscleGroup()) {
+                if (!muscleGroups.contains(mg)) {
+                    muscleGroups.add(mg);
+                }
+            }
+        }
+
+        DefaultComboBoxModel model = new DefaultComboBoxModel(muscleGroups.toArray());
+        muscleGroupDropDown.setModel(model);
+    }
+
+    public void initializeExerciseDropDown() {
+        List<String> exercises = new ArrayList<>();
+        for (Workout w : selectionList) {
+            String selectedMuscleGroup = (String) muscleGroupDropDown.getSelectedItem();
+            if (w.getMuscleGroup().contains(selectedMuscleGroup)) {
+                exercises.add(w.getWorkoutName());
+            }
+        }
+
+        DefaultComboBoxModel model = new DefaultComboBoxModel(exercises.toArray());
+        exerciseDropDown.setModel(model);
     }
 
     //MODIFIES: this
@@ -68,8 +319,6 @@ public class FitnessApp {
     private void runFitnessApp() {
         boolean keepGoing = true;
         String command;
-        initSelectionList1();
-        initSelectionList2();
 
         while (keepGoing) {
             displayTitleScreen();
@@ -108,6 +357,7 @@ public class FitnessApp {
                 deleteWorkoutSession();
             } else if (userCommand.equals(CLEAR_COMMAND)) {
                 clearAllWorkoutSessions();
+                showAllSessionNames();
             } else if (userCommand.equals(GO_BACK_COMMAND)) {
                 stillViewing = false;
             } else if (userCommand.equals("")) {
@@ -142,7 +392,6 @@ public class FitnessApp {
     private void clearAllWorkoutSessions() {
         pastLog.clearAllWorkoutSessions();
         overwritePastLogs();
-        showAllSessionNames();
     }
 
 
@@ -299,6 +548,7 @@ public class FitnessApp {
             System.out.println(w.getSummary());
         }
     }
+
 
     //EFFECTS: prints out current selections that have been added to queue
     private void printCurrentSelections() {
