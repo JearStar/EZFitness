@@ -15,10 +15,14 @@ import persistence.JsonReaderPast;
 import persistence.JsonWriterCurrent;
 import persistence.JsonWriterPast;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,7 +76,7 @@ public class FitnessApp extends JFrame {
     JPanel viewingTab = new JPanel();
     JPanel titleScreen = new JPanel(new BorderLayout());
     JPanel addingTab = new JPanel(new BorderLayout());
-    JComboBox<String> comboBox = new JComboBox<>();
+    JComboBox<String> pastLogDropDown = new JComboBox<>();
     JComboBox<String> muscleGroupDropDown = new JComboBox<>();
     JComboBox<String> exerciseDropDown = new JComboBox<>();
     JComboBox<String> myQueue = new JComboBox<>();
@@ -109,12 +113,16 @@ public class FitnessApp extends JFrame {
         runFitnessApp();
     }
 
+    //MODIFIES: this
+    //EFFECTS: loads the tabs for navigation
     public void loadTabs() {
         loadTitleTab();
         loadViewingTab();
         loadAddingTab();
     }
 
+    //MODIFIES: this
+    //EFFECTS: loads the title screen
     public void loadTitleTab() {
         titleCentralPanel.setBackground(new Color(129, 121, 141));
         titleCentralPanel.setLayout(null);
@@ -123,27 +131,27 @@ public class FitnessApp extends JFrame {
         titleScreenLabel.setHorizontalAlignment(JLabel.CENTER);
         titleCentralPanel.add(titleScreenLabel, BorderLayout.PAGE_START);
         titleScreen.add(titleCentralPanel);
-        addTitleScreenButtons(titleScreen);
+        addTitleScreenButtons();
         sidebar.add(titleScreen, TITLE_SCREEN_INDEX);
         sidebar.setTitleAt(TITLE_SCREEN_INDEX, TITLE_SCREEN_LABEL);
     }
 
-    public void addTitleScreenButtons(JPanel titleScreen) {
+    //MODIFIES: this
+    //EFFECTS: adds title screen buttons
+    public void addTitleScreenButtons() {
         toViewingScreenButton.setBounds(WIDTH / 4, HEIGHT / 8 * 2, WIDTH / 2, HEIGHT / 10);
         toAddingScreenButton.setBounds(WIDTH / 4, HEIGHT / 8 * 4, WIDTH / 2, HEIGHT / 10);
         titleCentralPanel.add(toViewingScreenButton, BorderLayout.CENTER);
         titleCentralPanel.add(toAddingScreenButton, BorderLayout.CENTER);
 
-        toAddingScreenButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String buttonPressed = e.getActionCommand();
-                if (buttonPressed.equals(ADDING_TAB_LABEL)) {
-                    sidebar.setSelectedIndex(ADDING_TAB_INDEX);
-                }
-            }
-        });
+        setActionListenerToAddingScreenButton();
 
+        setActionListenerToViewingScreenButton();
+    }
+
+    //MODIFIES: this
+    //EFFECTS: adds action listener to "viewing screen" button on title page
+    private void setActionListenerToViewingScreenButton() {
         toViewingScreenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -151,10 +159,28 @@ public class FitnessApp extends JFrame {
                 if (buttonPressed.equals(VIEWING_TAB_LABEL)) {
                     sidebar.setSelectedIndex(VIEWING_TAB_INDEX);
                 }
+                playSound("./data/normal-hitnormal.wav");
             }
         });
     }
 
+    //MODIFIES: this
+    //EFFECTS: adds action listener to "workout session" button on title page
+    private void setActionListenerToAddingScreenButton() {
+        toAddingScreenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String buttonPressed = e.getActionCommand();
+                if (buttonPressed.equals(ADDING_TAB_LABEL)) {
+                    sidebar.setSelectedIndex(ADDING_TAB_INDEX);
+                }
+                playSound("./data/normal-hitnormal.wav");
+            }
+        });
+    }
+
+    //MODIFIES: this
+    //EFFECTS: loads the tab for viewing past logs
     public void loadViewingTab() {
         JLabel viewingTabLabel = new JLabel("Viewing Tab");
         viewingTab.add(viewingTabLabel, TOP_ALIGNMENT);
@@ -168,57 +194,72 @@ public class FitnessApp extends JFrame {
         sidebar.setTitleAt(VIEWING_TAB_INDEX, VIEWING_TAB_LABEL);
     }
 
+    //MODIFIES: this
+    //EFFECTS: initializes the delete button on the viewing tab
     public void addViewingTabDeleteButton() {
         JButton deleteButton = new JButton("Delete");
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
                 if (!(pastLog.getPastWorkoutSessions().isEmpty())) {
                     if (confirmAction()) {
-                        String sessionName = (String) comboBox.getSelectedItem();
+                        String sessionName = (String) pastLogDropDown.getSelectedItem();
                         pastLog.removeWorkoutSession(sessionName);
-                        updateComboBox();
+                        overwritePastLogs();
+                        updatePastLogDropDown();
                         updateSummaryField();
                     }
                 }
+
             }
         });
         viewingTabTopPanel.add(deleteButton);
     }
 
+    //MODIFIES: this
+    //EFFECTS: initializes clear button on viewing tab
     public void addViewingTabClearButton() {
         JButton clearButton = new JButton("Clear");
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
                 if (!(pastLog.getPastWorkoutSessions().isEmpty())) {
                     if (confirmAction()) {
                         clearAllWorkoutSessions();
-                        updateComboBox();
+                        overwritePastLogs();
+                        updatePastLogDropDown();
                         summaryField.setText("");
                     }
                 }
+
             }
         });
         viewingTabTopPanel.add(clearButton);
     }
 
+    //EFFECTS: prompts the user to confirm action
     public boolean confirmAction() {
         int input = JOptionPane.showConfirmDialog(null,
                 "Please confirm action", "Confirm action", JOptionPane.YES_NO_OPTION);
         return input == 0;
     }
 
-    public void updateComboBox() {
+    //MODIFIES: this
+    //EFFECTS: updates the dropdown containing past logs
+    public void updatePastLogDropDown() {
         DefaultComboBoxModel model = new DefaultComboBoxModel(pastLog.getPastSessionNames().toArray());
-        comboBox.setModel(model);
+        pastLogDropDown.setModel(model);
     }
 
+    //MODIFIES: this
+    //EFFECTS: adds dropdown list to the viewing tab
     public void addViewingTabDropDownList() {
 
         loadPastLogsIntoDropDown();
-        viewingTabTopPanel.add(comboBox);
-        comboBox.addActionListener(new ActionListener() {
+        viewingTabTopPanel.add(pastLogDropDown);
+        pastLogDropDown.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateSummaryField();
@@ -226,6 +267,8 @@ public class FitnessApp extends JFrame {
         });
     }
 
+    //MODIFIES: this
+    //EFFECTS: initializes the summary field on viewing tab
     public void initializeSummaryField() {
 
         JScrollPane scrollPane = new JScrollPane(summaryField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -239,8 +282,10 @@ public class FitnessApp extends JFrame {
         updateSummaryField();
     }
 
+    //MODIFIES: this
+    //EFFECTS: updates the summary field
     public void updateSummaryField() {
-        String logName = (String) comboBox.getSelectedItem();
+        String logName = (String) pastLogDropDown.getSelectedItem();
         if (pastLog.getPastWorkoutSessions().isEmpty()) {
             summaryField.setText("");
         } else {
@@ -248,6 +293,8 @@ public class FitnessApp extends JFrame {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: loads pastlogs into dropdown
     public void loadPastLogsIntoDropDown() {
         try {
             this.pastLog = jsonReaderPast.read();
@@ -255,11 +302,13 @@ public class FitnessApp extends JFrame {
             // Handle Exception
         } finally {
             for (WorkoutSession ws : pastLog.getPastWorkoutSessions()) {
-                comboBox.addItem(ws.getSessionName());
+                pastLogDropDown.addItem(ws.getSessionName());
             }
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: loads the workout session adding tab
     public void loadAddingTab() {
         JPanel topOfPagePanel = new JPanel();
         sidebar.add(addingTab, ADDING_TAB_INDEX);
@@ -277,6 +326,8 @@ public class FitnessApp extends JFrame {
         initializeDropDowns();
     }
 
+    //MODIFIES: this
+    //EFFECTS: sets action listener for the "new session" button on the adding tab
     public void setActionListenerNewSessionButton() {
         newSessionButton.addActionListener(new ActionListener() {
             @Override
@@ -298,11 +349,13 @@ public class FitnessApp extends JFrame {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-
+                playSound("./data/normal-hitnormal.wav");
             }
         });
     }
 
+    //MODIFIES: this
+    //EFFECTS: sets action listener for the "load session" button on adding tab
     public void setActionListenerLoadSessionButton() {
         loadSessionButton.addActionListener(new ActionListener() {
             @Override
@@ -317,10 +370,13 @@ public class FitnessApp extends JFrame {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
+                playSound("./data/normal-hitnormal.wav");
             }
         });
     }
 
+    //MODIFIES: this
+    //EFFECTS: adds the lower half of the adding tab
     public void addLowerHalfPanelAdding() {
         centerOfPagePanel.setLayout(null);
         initializeLowerPanelButtons();
@@ -334,6 +390,7 @@ public class FitnessApp extends JFrame {
         exerciseDropDown.setBounds(WIDTH / 20, HEIGHT / 16 * 9, WIDTH / 10 * 2, HEIGHT / 20);
         myQueue.setBounds(WIDTH / 20 * 10, HEIGHT / 16 * 6, WIDTH / 10 * 2, HEIGHT / 20);
 
+
         centerOfPagePanel.add(muscleGroupLabel);
         centerOfPagePanel.add(exerciseLabel);
         centerOfPagePanel.add(queueLabel);
@@ -343,6 +400,8 @@ public class FitnessApp extends JFrame {
         addingTab.add(centerOfPagePanel);
     }
 
+    //MODIFIES: this
+    //EFFECTS: initializes buttons on lower panel of adding tab
     public void initializeLowerPanelButtons() {
         addButton.setBounds(WIDTH / 20 * 5, HEIGHT / 16 * 9, WIDTH / 20 * 2, HEIGHT / 20);
         centerOfPagePanel.add(addButton);
@@ -359,10 +418,13 @@ public class FitnessApp extends JFrame {
         setActionListenerStartButton();
     }
 
+    //MODIFIES: this
+    //EFFECTS: sets action listener on "start" button on adding tab
     public void setActionListenerStartButton() {
         startWorkoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
                 if (session.getQueue().isEmpty()) {
                     sidebar.setSelectedIndex(TITLE_SCREEN_INDEX);
 
@@ -374,43 +436,56 @@ public class FitnessApp extends JFrame {
         });
     }
 
+    //MODIFIES: this
+    //EFFECTS: starts the workout after begin workout button has been clicked
     public void startWorkoutGUI() {
         initializeQueueDropDown();
         beginWorkoutGUI(session);
         pastLog.addSession(session);
         overwritePastLogs();
         clearCurrentSession();
-        updateComboBox();
-        comboBox.setSelectedIndex(pastLog.getPastWorkoutSessions().size() - 1);
+        updatePastLogDropDown();
+        pastLogDropDown.setSelectedIndex(pastLog.getPastWorkoutSessions().size() - 1);
         updateSummaryField();
         sidebar.setSelectedIndex(VIEWING_TAB_INDEX);
     }
 
+    //MODIFIES: this
+    //EFFECTS: sets action listener on "clear" button on adding tab
     public void setActionListenerClearButton() {
         clearAllWorkoutsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
                 session.clearWorkouts();
                 initializeQueueDropDown();
+
             }
         });
     }
 
+    //MODIFIES: this
+    //EFFECTS: sets action listener for "add" button on adding tab
     public void setActionListenerAddButton() {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
                 String workoutName = (String) exerciseDropDown.getSelectedItem();
                 session.addWorkout(whichWorkoutToAdd(workoutName));
                 initializeQueueDropDown();
+
             }
         });
     }
 
+    //MODIFIES: this
+    //EFFECTS: sets action listener for "delete" button on adding tab
     public void setActionListenerDeleteButton() {
         deleteWorkoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
                 String workoutName = null;
                 try {
                     workoutName = ((String) myQueue.getSelectedItem()).toLowerCase();
@@ -419,10 +494,13 @@ public class FitnessApp extends JFrame {
                 }
                 session.removeWorkout(workoutName);
                 initializeQueueDropDown();
+
             }
         });
     }
 
+    //MODIFIES: this
+    //EFFECTS: initializes drop downs on adding tab
     public void initializeDropDowns() {
         initializeMuscleGroupDropDown();
         initializeExerciseDropDown();
@@ -430,6 +508,8 @@ public class FitnessApp extends JFrame {
         setActionListenerMuscleGroupDropDown();
     }
 
+    //MODIFIES: this
+    //EFFECTS: initializes queue drop down on adding tab
     public void initializeQueueDropDown() {
         List<String> workoutsInQueue = new ArrayList<>();
         for (Workout w : session.getQueue()) {
@@ -439,6 +519,8 @@ public class FitnessApp extends JFrame {
         myQueue.setModel(model);
     }
 
+    //MODIFIES: this
+    //EFFECTS: sets action listener for muscle group drop down on adding tab
     public void setActionListenerMuscleGroupDropDown() {
         muscleGroupDropDown.addActionListener(new ActionListener() {
             @Override
@@ -448,6 +530,8 @@ public class FitnessApp extends JFrame {
         });
     }
 
+    //MODIFIES: this
+    //EFFECTS: initializes muscle group drop down on adding tab
     public void initializeMuscleGroupDropDown() {
         List<String> muscleGroups = new ArrayList<>();
         for (Workout w : selectionList) {
@@ -462,6 +546,8 @@ public class FitnessApp extends JFrame {
         muscleGroupDropDown.setModel(model);
     }
 
+    //MODIFIES: this
+    //EFFECTS: initializes exercise drop down on adding tab
     public void initializeExerciseDropDown() {
         List<String> exercises = new ArrayList<>();
         for (Workout w : selectionList) {
@@ -473,6 +559,19 @@ public class FitnessApp extends JFrame {
 
         DefaultComboBoxModel model = new DefaultComboBoxModel(exercises.toArray());
         exerciseDropDown.setModel(model);
+    }
+
+    //EFFECTS: plays sound given file source
+    public void playSound(String soundName) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
+        }
     }
 
     //MODIFIES: this
@@ -630,6 +729,7 @@ public class FitnessApp extends JFrame {
     }
 
 
+    //MODIFIES: this
     //EFFECTS: begins the workout
     private void beginWorkout(WorkoutSession ws) {
         for (Workout w : ws.getQueue()) {
@@ -642,6 +742,8 @@ public class FitnessApp extends JFrame {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: GUI version for begin workout
     private void beginWorkoutGUI(WorkoutSession ws) {
         for (Workout w : ws.getQueue()) {
             List<Double> infoList = new ArrayList<>();
@@ -653,6 +755,8 @@ public class FitnessApp extends JFrame {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: asks user for input in GUI
     private void askForUserInputGUI(Workout w, List<Double> infoList) {
         if (w instanceof MuscleExercise) {
             double sets = askForSetsGUI(w, infoList);
@@ -668,6 +772,7 @@ public class FitnessApp extends JFrame {
     }
 
 
+    //MODIFIES: this
     //EFFECTS: asks for user input on workout details
     private void askForUserInput(Workout w, List<Double> infoList) {
         if (w instanceof MuscleExercise) {
@@ -690,6 +795,8 @@ public class FitnessApp extends JFrame {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: asks for reps in GUI
     private void askForRepsGUI(List<Double> infoList, int i) {
         while (true) {
             try {
@@ -699,14 +806,14 @@ public class FitnessApp extends JFrame {
                         JOptionPane.PLAIN_MESSAGE)));
                 infoList.add(info);
                 break;
-            } catch (NumberFormatException e) {
-                //do nothing
-            } catch (NullPointerException e) {
+            } catch (NumberFormatException | NullPointerException e) {
                 //do nothing
             }
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: asks for weight in GUI
     private void askForWeightGUI(List<Double> infoList, int i) {
         while (true) {
             try {
@@ -716,14 +823,14 @@ public class FitnessApp extends JFrame {
                         JOptionPane.PLAIN_MESSAGE)));
                 infoList.add(info);
                 break;
-            } catch (NumberFormatException e) {
-                //do nothing
-            } catch (NullPointerException e) {
+            } catch (NumberFormatException | NullPointerException e) {
                 //do nothing
             }
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: asks for time in GUI
     private void askForTimeGUI(List<Double> infoList, Workout w) {
         while (true) {
             try {
@@ -733,15 +840,15 @@ public class FitnessApp extends JFrame {
                         JOptionPane.PLAIN_MESSAGE)));
                 infoList.add(info);
                 break;
-            } catch (NumberFormatException e) {
-                //do nothing
-            } catch (NullPointerException e) {
+            } catch (NumberFormatException | NullPointerException e) {
                 //do nothing
             }
         }
     }
 
 
+    //MODIFIES: this
+    //EFFECTS: asks for weight or time
     private void askForRepsOrWeightOrTime(List<Double> infoList) {
         Scanner sc = new Scanner(System.in);
 
@@ -758,8 +865,10 @@ public class FitnessApp extends JFrame {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: asks for sets in GUI
     private double askForSetsGUI(Workout w, List<Double> infoList) {
-        double sets = 0;
+        double sets;
         while (true) {
             try {
                 sets = abs(Double.parseDouble(JOptionPane.showInputDialog(null,
@@ -777,9 +886,11 @@ public class FitnessApp extends JFrame {
         return sets;
     }
 
+    //MODIFIES: this
+    //EFFECTS: asks for sets
     private double askForSets(Workout w, List<Double> infoList) {
         Scanner sc = new Scanner(System.in);
-        double sets = 0;
+        double sets;
         System.out.println("Please enter the number of sets done for " + w.getWorkoutName());
         while (true) {
             try {

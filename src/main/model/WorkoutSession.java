@@ -86,6 +86,7 @@ public class WorkoutSession implements Writable {
         }
     }
 
+    //EFFECTS: returns workout summary for current session
     public String getSessionSummary() {
         String result = "";
         for (Workout w : this.finishedList) {

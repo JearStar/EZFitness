@@ -28,7 +28,7 @@ public class WorkoutSessionTest {
     }
 
     @Test
-    public void testRemoveFirstOfQueue(){
+    public void testRemoveFirstOfQueue() {
         Bicycle testBicycle = new Bicycle();
         Deadlift testDeadlift = new Deadlift();
         testSession.addWorkout(testBicycle);
@@ -43,7 +43,7 @@ public class WorkoutSessionTest {
     }
 
     @Test
-    public void testGetFinishedList(){
+    public void testGetFinishedList() {
         Bicycle testBicycle = new Bicycle();
         Deadlift testDeadlift = new Deadlift();
         testSession.addToFinalList(testBicycle);
@@ -237,7 +237,7 @@ public class WorkoutSessionTest {
     }
 
     @Test
-    public void testWhichWorkoutToAddNull(){
+    public void testWhichWorkoutToAddNull() {
         List<String> expectedList = new ArrayList<>();
         testSession.addWorkout(whichWorkoutToAdd7("asdf"));
         assertEquals(0, expectedList.size());
@@ -416,6 +416,40 @@ public class WorkoutSessionTest {
             assertTrue(expectedList.contains(w.getWorkoutName()));
         }
 
+    }
+
+    @Test
+    public void testGetSessionSummary() {
+        Bicycle testBicycle = new Bicycle();
+        List<Double> infoList1 = new ArrayList<>();
+        infoList1.add(10.0);
+
+        Deadlift testDeadlift = new Deadlift();
+        List<Double> infoList2 = new ArrayList<>();
+        infoList2.add(3.0);
+
+        infoList2.add(10.0);
+        infoList2.add(195.0);
+
+        infoList2.add(8.0);
+        infoList2.add(190.0);
+
+        infoList2.add(9.0);
+        infoList2.add(185.0);
+
+        testBicycle.goThroughWorkout(infoList1);
+        testDeadlift.goThroughWorkout(infoList2);
+        testSession.getFinishedList().add(testBicycle);
+        testSession.getFinishedList().add(testDeadlift);
+
+        assertEquals("\n" +
+                "Bicycle\n" +
+                "Time: 10.0 minutes\n" +
+                "\n" +
+                "Deadlift\n" +
+                "Sets: 3\n" +
+                "Reps: 10 8 9 \n" +
+                "Weights: 195 190 185 \n", testSession.getSessionSummary());
     }
 
 

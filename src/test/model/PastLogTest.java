@@ -23,7 +23,7 @@ public class PastLogTest {
 
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         testBicycle = new Bicycle();
         testDeadlift = new Deadlift();
         testTreadmill = new TreadMill();
@@ -40,8 +40,9 @@ public class PastLogTest {
         testWorkoutSession2.addWorkout(testBicycle);
 
     }
+
     @Test
-    public void testAddAndGetSession(){
+    public void testAddAndGetSession() {
         testPastLog.addSession(testWorkoutSession1);
         assertEquals(1, testPastLog.getPastWorkoutSessions().size());
         assertEquals(testWorkoutSession1, testPastLog.getPastWorkoutSessions().get(0));
@@ -52,7 +53,7 @@ public class PastLogTest {
     }
 
     @Test
-    public void testRemoveSession(){
+    public void testRemoveSession() {
         testPastLog.addSession(testWorkoutSession1);
         testPastLog.addSession(testWorkoutSession2);
 
@@ -66,7 +67,7 @@ public class PastLogTest {
     }
 
     @Test
-    public void testClearAllWorkoutSessions(){
+    public void testClearAllWorkoutSessions() {
         testPastLog.addSession(testWorkoutSession1);
         testPastLog.addSession(testWorkoutSession2);
         assertEquals(2, testPastLog.getPastWorkoutSessions().size());
@@ -75,7 +76,7 @@ public class PastLogTest {
     }
 
     @Test
-    public void testGetPastSessionNames(){
+    public void testGetPastSessionNames() {
         testPastLog.addSession(testWorkoutSession1);
         testPastLog.addSession(testWorkoutSession2);
         List<String> expectedList = new ArrayList<>();
@@ -83,5 +84,13 @@ public class PastLogTest {
         expectedList.add("testSession2");
 
         assertEquals(expectedList, testPastLog.getPastSessionNames());
+    }
+
+    @Test
+    public void testFindWorkoutSession() {
+        testPastLog.addSession(testWorkoutSession1);
+        testPastLog.addSession(testWorkoutSession2);
+        assertEquals(testWorkoutSession1, testPastLog.findWorkoutSession("testSession1"));
+        assertEquals(testWorkoutSession2, testPastLog.findWorkoutSession("testSession2"));
     }
 }
