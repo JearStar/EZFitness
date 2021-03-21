@@ -57,15 +57,15 @@ public class FitnessApp extends JFrame {
     public static final int TITLE_SCREEN_INDEX = 0;
     public static final int VIEWING_TAB_INDEX = 1;
     public static final int ADDING_TAB_INDEX = 2;
-    private JTabbedPane sidebar;
+    private final JTabbedPane sidebar = new JTabbedPane();
 
     private static final String SESSION_STORE = "./data/currentsession.json";
     private static final String LOGS_STORE = "./data/pastlogs.json";
     private static final Scanner input = new Scanner(System.in);
-    private JsonWriterCurrent jsonWriterCurrent = new JsonWriterCurrent(SESSION_STORE);
-    private JsonReaderCurrent jsonReaderCurrent = new JsonReaderCurrent(SESSION_STORE);
-    private JsonWriterPast jsonWriterPast = new JsonWriterPast(LOGS_STORE);
-    private JsonReaderPast jsonReaderPast = new JsonReaderPast(LOGS_STORE);
+    private final JsonWriterCurrent jsonWriterCurrent = new JsonWriterCurrent(SESSION_STORE);
+    private final JsonReaderCurrent jsonReaderCurrent = new JsonReaderCurrent(SESSION_STORE);
+    private final JsonWriterPast jsonWriterPast = new JsonWriterPast(LOGS_STORE);
+    private final JsonReaderPast jsonReaderPast = new JsonReaderPast(LOGS_STORE);
     List<Workout> selectionList = new ArrayList<>();
     WorkoutSession session = new WorkoutSession();
     PastLog pastLog = new PastLog();
@@ -75,15 +75,19 @@ public class FitnessApp extends JFrame {
     JComboBox<String> comboBox = new JComboBox<>();
     JComboBox<String> muscleGroupDropDown = new JComboBox<>();
     JComboBox<String> exerciseDropDown = new JComboBox<>();
+    JComboBox<String> myQueue = new JComboBox<>();
     JPanel viewingTabTopPanel = new JPanel();
-    JTextArea summaryField = new JTextArea();
-    JTextArea queueScreen = new JTextArea();
+    JTextPane summaryField = new JTextPane();
     JPanel centerOfPagePanel = new JPanel();
     JButton newSessionButton = new JButton("New Session");
     JButton loadSessionButton = new JButton("Load Previous Session");
     JPanel titleCentralPanel = new JPanel();
     JButton toViewingScreenButton = new JButton(VIEWING_TAB_LABEL);
     JButton toAddingScreenButton = new JButton(ADDING_TAB_LABEL);
+    JButton addButton = new JButton("Add");
+    JButton deleteWorkoutButton = new JButton("Delete");
+    JButton clearAllWorkoutsButton = new JButton("Clear");
+    JButton startWorkoutButton = new JButton("Start Workout");
 
     public static void main(String[] args) {
         new FitnessApp();
@@ -97,7 +101,6 @@ public class FitnessApp extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setSize(WIDTH, HEIGHT);
-        sidebar = new JTabbedPane();
 
         loadTabs();
         add(sidebar);
@@ -116,7 +119,7 @@ public class FitnessApp extends JFrame {
         titleCentralPanel.setBackground(new Color(129, 121, 141));
         titleCentralPanel.setLayout(null);
         JLabel titleScreenLabel = new JLabel(TITLE_SCREEN_LABEL);
-        titleScreenLabel.setBounds(WIDTH / 4, HEIGHT / 8 * 1, WIDTH / 2, HEIGHT / 10);
+        titleScreenLabel.setBounds(WIDTH / 4, HEIGHT / 8, WIDTH / 2, HEIGHT / 10);
         titleScreenLabel.setHorizontalAlignment(JLabel.CENTER);
         titleCentralPanel.add(titleScreenLabel, BorderLayout.PAGE_START);
         titleScreen.add(titleCentralPanel);
@@ -159,6 +162,7 @@ public class FitnessApp extends JFrame {
         addViewingTabDeleteButton();
         addViewingTabClearButton();
         addViewingTabDropDownList();
+        initializeSummaryField();
         viewingTab.add(viewingTabTopPanel, BorderLayout.PAGE_START);
         sidebar.add(viewingTab, VIEWING_TAB_INDEX);
         sidebar.setTitleAt(VIEWING_TAB_INDEX, VIEWING_TAB_LABEL);
@@ -169,10 +173,13 @@ public class FitnessApp extends JFrame {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (confirmAction()) {
-                    String sessionName = (String) comboBox.getSelectedItem();
-                    pastLog.removeWorkoutSession(sessionName);
-                    updateComboBox();
+                if (!(pastLog.getPastWorkoutSessions().isEmpty())) {
+                    if (confirmAction()) {
+                        String sessionName = (String) comboBox.getSelectedItem();
+                        pastLog.removeWorkoutSession(sessionName);
+                        updateComboBox();
+                        updateSummaryField();
+                    }
                 }
             }
         });
@@ -184,10 +191,12 @@ public class FitnessApp extends JFrame {
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (confirmAction()) {
-                    clearAllWorkoutSessions();
-                    updateComboBox();
-                    summaryField.setText("");
+                if (!(pastLog.getPastWorkoutSessions().isEmpty())) {
+                    if (confirmAction()) {
+                        clearAllWorkoutSessions();
+                        updateComboBox();
+                        summaryField.setText("");
+                    }
                 }
             }
         });
@@ -197,11 +206,7 @@ public class FitnessApp extends JFrame {
     public boolean confirmAction() {
         int input = JOptionPane.showConfirmDialog(null,
                 "Please confirm action", "Confirm action", JOptionPane.YES_NO_OPTION);
-        if (input == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return input == 0;
     }
 
     public void updateComboBox() {
@@ -210,21 +215,37 @@ public class FitnessApp extends JFrame {
     }
 
     public void addViewingTabDropDownList() {
-        JScrollPane scrollPane = new JScrollPane(summaryField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
         loadPastLogsIntoDropDown();
         viewingTabTopPanel.add(comboBox);
-        viewingTab.add(scrollPane);
-        summaryField.setEditable(false);
-        summaryField.setBackground(new Color(88, 92, 125));
-        viewingTabTopPanel.setBackground(new Color(120, 134, 154));
         comboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String logName = (String) comboBox.getSelectedItem();
-                summaryField.setText(pastLog.findWorkoutSession(logName).getSessionSummary());
+                updateSummaryField();
             }
         });
+    }
+
+    public void initializeSummaryField() {
+
+        JScrollPane scrollPane = new JScrollPane(summaryField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        viewingTab.setBounds(WIDTH / 4, HEIGHT / 8, WIDTH / 2, HEIGHT / 8 * 7);
+        viewingTab.add(scrollPane, BorderLayout.CENTER);
+        summaryField.setEditable(false);
+
+        viewingTabTopPanel.setBackground(new Color(120, 134, 154));
+
+        updateSummaryField();
+    }
+
+    public void updateSummaryField() {
+        String logName = (String) comboBox.getSelectedItem();
+        if (pastLog.getPastWorkoutSessions().isEmpty()) {
+            summaryField.setText("");
+        } else {
+            summaryField.setText(pastLog.findWorkoutSession(logName).getSessionSummary());
+        }
     }
 
     public void loadPastLogsIntoDropDown() {
@@ -246,36 +267,174 @@ public class FitnessApp extends JFrame {
 
         topOfPagePanel.add(newSessionButton);
         topOfPagePanel.add(loadSessionButton);
+
+        setActionListenerNewSessionButton();
+        setActionListenerLoadSessionButton();
+
         addingTab.add(topOfPagePanel, BorderLayout.PAGE_START);
         addLowerHalfPanelAdding();
-//        centerOfPagePanel.setVisible(false);
+        centerOfPagePanel.setVisible(false);
         initializeDropDowns();
+    }
+
+    public void setActionListenerNewSessionButton() {
+        newSessionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    WorkoutSession dummySession = jsonReaderCurrent.read();
+                    if (!(dummySession.getQueue().isEmpty())) {
+                        int input = JOptionPane.showConfirmDialog(null,
+                                "You currently have an old session in progress, would you like to start a new one?",
+                                "Confirm action", JOptionPane.YES_NO_OPTION);
+                        if (input == 0) {
+                            session = new WorkoutSession();
+                            centerOfPagePanel.setVisible(true);
+                        }
+                    } else {
+                        session = new WorkoutSession();
+                        centerOfPagePanel.setVisible(true);
+                    }
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    public void setActionListenerLoadSessionButton() {
+        loadSessionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    session = jsonReaderCurrent.read();
+                    if (!(session.getQueue().isEmpty())) {
+                        startWorkoutGUI();
+                    }
+
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
     }
 
     public void addLowerHalfPanelAdding() {
         centerOfPagePanel.setLayout(null);
+        initializeLowerPanelButtons();
         JLabel muscleGroupLabel = new JLabel("Muscle Groups");
-        muscleGroupLabel.setBounds(WIDTH / 20, HEIGHT / 16 * 1, WIDTH / 10 * 1, HEIGHT / 32);
+        muscleGroupLabel.setBounds(WIDTH / 20, HEIGHT / 16, WIDTH / 10, HEIGHT / 32);
         JLabel exerciseLabel = new JLabel("Exercises");
-        exerciseLabel.setBounds(WIDTH / 20, HEIGHT / 16 * 8, WIDTH / 10 * 1, HEIGHT / 32);
+        exerciseLabel.setBounds(WIDTH / 20, HEIGHT / 16 * 8, WIDTH / 10, HEIGHT / 32);
+        JLabel queueLabel = new JLabel("Your Queue");
+        queueLabel.setBounds(WIDTH / 20 * 10, HEIGHT / 16 * 5, WIDTH / 10, HEIGHT / 32);
         muscleGroupDropDown.setBounds(WIDTH / 20, HEIGHT / 16 * 2, WIDTH / 10 * 2, HEIGHT / 20);
         exerciseDropDown.setBounds(WIDTH / 20, HEIGHT / 16 * 9, WIDTH / 10 * 2, HEIGHT / 20);
-        JScrollPane scrollPane = new JScrollPane(queueScreen, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        queueScreen.setEditable(false);
-        scrollPane.setBounds(WIDTH / 20 * 10, HEIGHT / 16 * 1, WIDTH / 10 * 4, HEIGHT / 20 * 12);
+        myQueue.setBounds(WIDTH / 20 * 10, HEIGHT / 16 * 6, WIDTH / 10 * 2, HEIGHT / 20);
+
         centerOfPagePanel.add(muscleGroupLabel);
         centerOfPagePanel.add(exerciseLabel);
+        centerOfPagePanel.add(queueLabel);
         centerOfPagePanel.add(muscleGroupDropDown);
         centerOfPagePanel.add(exerciseDropDown);
-        centerOfPagePanel.add(scrollPane);
+        centerOfPagePanel.add(myQueue);
         addingTab.add(centerOfPagePanel);
+    }
+
+    public void initializeLowerPanelButtons() {
+        addButton.setBounds(WIDTH / 20 * 5, HEIGHT / 16 * 9, WIDTH / 20 * 2, HEIGHT / 20);
+        centerOfPagePanel.add(addButton);
+        deleteWorkoutButton.setBounds(WIDTH / 20 * 14, HEIGHT / 16 * 6, WIDTH / 20 * 2, HEIGHT / 20);
+        centerOfPagePanel.add(deleteWorkoutButton);
+        clearAllWorkoutsButton.setBounds(WIDTH / 20 * 16, HEIGHT / 16 * 6, WIDTH / 20 * 2, HEIGHT / 20);
+        centerOfPagePanel.add(clearAllWorkoutsButton);
+        startWorkoutButton.setBounds(WIDTH / 20 * 13, HEIGHT / 16 * 10, WIDTH / 20 * 6, HEIGHT / 20 * 2);
+        centerOfPagePanel.add(startWorkoutButton);
+
+        setActionListenerAddButton();
+        setActionListenerDeleteButton();
+        setActionListenerClearButton();
+        setActionListenerStartButton();
+    }
+
+    public void setActionListenerStartButton() {
+        startWorkoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (session.getQueue().isEmpty()) {
+                    sidebar.setSelectedIndex(TITLE_SCREEN_INDEX);
+
+                } else {
+                    startWorkoutGUI();
+                }
+                centerOfPagePanel.setVisible(false);
+            }
+        });
+    }
+
+    public void startWorkoutGUI() {
+        beginWorkoutGUI(session);
+        pastLog.addSession(session);
+        overwritePastLogs();
+        clearCurrentSession();
+        updateComboBox();
+        comboBox.setSelectedIndex(pastLog.getPastWorkoutSessions().size() - 1);
+        updateSummaryField();
+        sidebar.setSelectedIndex(VIEWING_TAB_INDEX);
+    }
+
+    public void setActionListenerClearButton() {
+        clearAllWorkoutsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                session.clearWorkouts();
+                initializeQueueDropDown();
+            }
+        });
+    }
+
+    public void setActionListenerAddButton() {
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String workoutName = (String) exerciseDropDown.getSelectedItem();
+                session.addWorkout(whichWorkoutToAdd(workoutName));
+                initializeQueueDropDown();
+            }
+        });
+    }
+
+    public void setActionListenerDeleteButton() {
+        deleteWorkoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String workoutName = null;
+                try {
+                    workoutName = ((String) myQueue.getSelectedItem()).toLowerCase();
+                } catch (NullPointerException exception) {
+                    // do nothing
+                }
+                session.removeWorkout(workoutName);
+                initializeQueueDropDown();
+            }
+        });
     }
 
     public void initializeDropDowns() {
         initializeMuscleGroupDropDown();
         initializeExerciseDropDown();
+        initializeQueueDropDown();
         setActionListenerMuscleGroupDropDown();
+    }
+
+    public void initializeQueueDropDown() {
+        List<String> workoutsInQueue = new ArrayList<>();
+        for (Workout w : session.getQueue()) {
+            workoutsInQueue.add(w.getWorkoutName());
+        }
+        DefaultComboBoxModel model = new DefaultComboBoxModel(workoutsInQueue.toArray());
+        myQueue.setModel(model);
     }
 
     public void setActionListenerMuscleGroupDropDown() {
@@ -481,30 +640,159 @@ public class FitnessApp extends JFrame {
         }
     }
 
+    private void beginWorkoutGUI(WorkoutSession ws) {
+        for (Workout w : ws.getQueue()) {
+            List<Double> infoList = new ArrayList<>();
+            askForUserInputGUI(w, infoList);
+            w.goThroughWorkout(infoList);
+            ws.addToFinalList(w);
+            ws.removeFirstOfQueue();
+            saveCurrentWorkoutSession();
+        }
+    }
+
+    private void askForUserInputGUI(Workout w, List<Double> infoList) {
+        if (w instanceof MuscleExercise) {
+            double sets = askForSetsGUI(w, infoList);
+
+
+            for (int i = 0; i < sets; i++) {
+                askForRepsGUI(infoList, i);
+                askForWeightGUI(infoList, i);
+            }
+        } else {
+            askForTimeGUI(infoList, w);
+        }
+    }
+
+
     //EFFECTS: asks for user input on workout details
     private void askForUserInput(Workout w, List<Double> infoList) {
         if (w instanceof MuscleExercise) {
 
-            System.out.println("Please enter the number of sets done for " + w.getWorkoutName());
-            double sets = abs(input.nextDouble());
-            infoList.add(sets);
+            double sets = askForSets(w, infoList);
+
 
             for (int i = 0; i < sets; i++) {
                 System.out.println("\nPlease enter number of reps for set " + (i + 1));
-                double reps = abs(input.nextDouble());
-                infoList.add(reps);
+                askForRepsOrWeightOrTime(infoList);
+
 
                 System.out.println("\nPlease enter the weight done for set " + (i + 1));
-                double weight = abs(input.nextDouble());
-                infoList.add(weight);
+                askForRepsOrWeightOrTime(infoList);
             }
         } else {
 
             System.out.println("Please enter number of minutes done for " + w.getWorkoutName());
-            double time = input.nextDouble();
-            infoList.add(time);
+            askForRepsOrWeightOrTime(infoList);
         }
     }
+
+    private void askForRepsGUI(List<Double> infoList, int i) {
+        while (true) {
+            try {
+                double info = abs(Double.parseDouble(JOptionPane.showInputDialog(null,
+                        "Please enter the number of reps done for set " + (i + 1),
+                        "Input Reps",
+                        JOptionPane.PLAIN_MESSAGE)));
+                infoList.add(info);
+                break;
+            } catch (NumberFormatException e) {
+                //do nothing
+            } catch (NullPointerException e) {
+                //do nothing
+            }
+        }
+    }
+
+    private void askForWeightGUI(List<Double> infoList, int i) {
+        while (true) {
+            try {
+                double info = abs(Double.parseDouble(JOptionPane.showInputDialog(null,
+                        "Please enter the weight done for set " + (i + 1),
+                        "Input Weight",
+                        JOptionPane.PLAIN_MESSAGE)));
+                infoList.add(info);
+                break;
+            } catch (NumberFormatException e) {
+                //do nothing
+            } catch (NullPointerException e) {
+                //do nothing
+            }
+        }
+    }
+
+    private void askForTimeGUI(List<Double> infoList, Workout w) {
+        while (true) {
+            try {
+                double info = abs(Double.parseDouble(JOptionPane.showInputDialog(null,
+                        "Please enter number of minutes done for " + w.getWorkoutName(),
+                        "Input Time",
+                        JOptionPane.PLAIN_MESSAGE)));
+                infoList.add(info);
+                break;
+            } catch (NumberFormatException e) {
+                //do nothing
+            } catch (NullPointerException e) {
+                //do nothing
+            }
+        }
+    }
+
+
+    private void askForRepsOrWeightOrTime(List<Double> infoList) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            try {
+                double info = abs(Double.parseDouble(sc.next()));
+                infoList.add(info);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input");
+            } catch (NullPointerException e) {
+                //do nothing
+            }
+        }
+    }
+
+    private double askForSetsGUI(Workout w, List<Double> infoList) {
+        double sets = 0;
+        while (true) {
+            try {
+                sets = abs(Double.parseDouble(JOptionPane.showInputDialog(null,
+                        "Please enter the number of sets done for " + w.getWorkoutName(),
+                        "Input Sets",
+                        JOptionPane.PLAIN_MESSAGE)));
+                infoList.add(sets);
+                break;
+            } catch (NumberFormatException e) {
+                //Do nothing
+            } catch (NullPointerException e) {
+                //do nothing
+            }
+        }
+        return sets;
+    }
+
+    private double askForSets(Workout w, List<Double> infoList) {
+        Scanner sc = new Scanner(System.in);
+        double sets = 0;
+        System.out.println("Please enter the number of sets done for " + w.getWorkoutName());
+        while (true) {
+            try {
+                sets = abs(Double.parseDouble(sc.next()));
+                infoList.add(sets);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input");
+            } catch (NullPointerException e) {
+                //do nothing
+            }
+        }
+        return sets;
+    }
+
 
     //EFFECTS: returns true if user selection is equal to a preset list command
     private boolean isEqualToPresetListSelection(String c) {
@@ -617,6 +905,7 @@ public class FitnessApp extends JFrame {
             System.out.println("Unable to read from file: " + SESSION_STORE);
         }
     }
+
 
     //EFFECTS: loads past logs from memory
     private void loadPastLogs() {

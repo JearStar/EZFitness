@@ -72,6 +72,7 @@ public class WorkoutSession implements Writable {
             Workout w = i.next();
             if (w.getWorkoutName().toLowerCase().equals(s)) {
                 i.remove();
+                break;
             }
         }
     }
