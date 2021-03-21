@@ -310,6 +310,7 @@ public class FitnessApp extends JFrame {
                 try {
                     session = jsonReaderCurrent.read();
                     if (!(session.getQueue().isEmpty())) {
+                        centerOfPagePanel.setVisible(true);
                         startWorkoutGUI();
                     }
 
@@ -374,6 +375,7 @@ public class FitnessApp extends JFrame {
     }
 
     public void startWorkoutGUI() {
+        initializeQueueDropDown();
         beginWorkoutGUI(session);
         pastLog.addSession(session);
         overwritePastLogs();
