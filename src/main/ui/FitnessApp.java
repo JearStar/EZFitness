@@ -35,6 +35,7 @@ import static model.WorkoutSession.whichWorkoutToAdd;
 
 /**
  * Fitness app class that combines user interface and classes in model
+ * hit-normal.wav is from osu! skin tranquil sublimity
  */
 
 public class FitnessApp extends JFrame {
@@ -93,10 +94,6 @@ public class FitnessApp extends JFrame {
     JButton clearAllWorkoutsButton = new JButton("Clear");
     JButton startWorkoutButton = new JButton("Start Workout");
 
-    public static void main(String[] args) {
-        new FitnessApp();
-    }
-
     //EFFECTS: runs fitness application
     public FitnessApp() {
         initSelectionList1();
@@ -127,6 +124,7 @@ public class FitnessApp extends JFrame {
         titleCentralPanel.setBackground(new Color(129, 121, 141));
         titleCentralPanel.setLayout(null);
         JLabel titleScreenLabel = new JLabel(TITLE_SCREEN_LABEL);
+        titleScreenLabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 45));
         titleScreenLabel.setBounds(WIDTH / 4, HEIGHT / 8, WIDTH / 2, HEIGHT / 10);
         titleScreenLabel.setHorizontalAlignment(JLabel.CENTER);
         titleCentralPanel.add(titleScreenLabel, BorderLayout.PAGE_START);
@@ -276,7 +274,7 @@ public class FitnessApp extends JFrame {
         viewingTab.setBounds(WIDTH / 4, HEIGHT / 8, WIDTH / 2, HEIGHT / 8 * 7);
         viewingTab.add(scrollPane, BorderLayout.CENTER);
         summaryField.setEditable(false);
-
+        summaryField.setBackground(new Color(245, 221, 190));
         viewingTabTopPanel.setBackground(new Color(120, 134, 154));
 
         updateSummaryField();
