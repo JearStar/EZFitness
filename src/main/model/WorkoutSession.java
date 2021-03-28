@@ -302,7 +302,7 @@ public class WorkoutSession implements Writable {
 
 
     //EFFECTS: adds exercises for a back day preset list
-    private void addBackDayExercises() {
+    public void addBackDayExercises() {
         this.addWorkout(new BarbellRow());
         this.addWorkout(new Deadlift());
         this.addWorkout(new ChinUp());
@@ -317,7 +317,7 @@ public class WorkoutSession implements Writable {
     }
 
     //EFFECTS: adds exercises for an abs day preset list
-    private void addAbsDayExercises() {
+    public void addAbsDayExercises() {
         this.addWorkout(new BicycleCrunch());
         this.addWorkout(new RussianTwist());
         this.addWorkout(new MountainClimber());
@@ -328,7 +328,7 @@ public class WorkoutSession implements Writable {
     }
 
     //EFFECTS: adds exercises for a shoulder day preset list
-    private void addShoulderDayExercises() {
+    public void addShoulderDayExercises() {
         this.addWorkout(new DumbellShoulderPress());
         this.addWorkout(new FacePull());
         this.addWorkout(new UprightRow());
@@ -339,7 +339,7 @@ public class WorkoutSession implements Writable {
     }
 
     //EFFECTS: adds exercises for an arm day preset list
-    private void addArmDayExercises() {
+    public void addArmDayExercises() {
         this.addWorkout(new DumbellCurl());
         this.addWorkout(new DumbellExtension());
         this.addWorkout(new CableCurl());
@@ -348,7 +348,7 @@ public class WorkoutSession implements Writable {
     }
 
     //EFFECTS: adds exercises for a chest day preset list
-    private void addChestDayExercises() {
+    public void addChestDayExercises() {
         this.addWorkout(new BarbellPress());
         this.addWorkout(new ChestPress());
         this.addWorkout(new DumbellPress());

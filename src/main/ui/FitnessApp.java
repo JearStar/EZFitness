@@ -90,9 +90,15 @@ public class FitnessApp extends JFrame {
     JButton toViewingScreenButton = new JButton(VIEWING_TAB_LABEL);
     JButton toAddingScreenButton = new JButton(ADDING_TAB_LABEL);
     JButton addButton = new JButton("Add");
-    JButton deleteWorkoutButton = new JButton("Delete");
-    JButton clearAllWorkoutsButton = new JButton("Clear");
-    JButton startWorkoutButton = new JButton("Start Workout");
+    JButton deleteWorkoutButton = new JButton(DELETE_COMMAND);
+    JButton clearAllWorkoutsButton = new JButton(CLEAR_COMMAND);
+    JButton startWorkoutButton = new JButton(BEGIN_WORKOUT_COMMAND);
+    JButton legPresetButton = new JButton(LEG_DAY_COMMAND);
+    JButton chestPresetButton = new JButton(CHEST_DAY_COMMAND);
+    JButton armPresetButton = new JButton(ARM_DAY_COMMAND);
+    JButton shoulderPresetButton = new JButton(SHOULDER_DAY_COMMAND);
+    JButton absPresetButton = new JButton(ABS_DAY_COMMAND);
+    JButton backPresetButton = new JButton(BACK_DAY_COMMAND);
 
     //EFFECTS: runs fitness application
     public FitnessApp() {
@@ -322,6 +328,116 @@ public class FitnessApp extends JFrame {
         addLowerHalfPanelAdding();
         centerOfPagePanel.setVisible(false);
         initializeDropDowns();
+        addPresetButtons();
+    }
+
+    //MODIFIES: this
+    //EFFECTS: adds buttons for selecting preset lists
+    public void addPresetButtons() {
+        legPresetButton.setBounds(WIDTH / 20 * 10, HEIGHT / 32, WIDTH / 10, HEIGHT / 32);
+        chestPresetButton.setBounds(WIDTH / 20 * 13, HEIGHT / 32, WIDTH / 10, HEIGHT / 32);
+        armPresetButton.setBounds(WIDTH / 20 * 16, HEIGHT / 32, WIDTH / 10, HEIGHT / 32);
+        shoulderPresetButton.setBounds(WIDTH / 20 * 10, HEIGHT / 32 * 3, WIDTH / 10, HEIGHT / 32);
+        absPresetButton.setBounds(WIDTH / 20 * 13, HEIGHT / 32 * 3, WIDTH / 10, HEIGHT / 32);
+        backPresetButton.setBounds(WIDTH / 20 * 16, HEIGHT / 32 * 3, WIDTH / 10, HEIGHT / 32);
+
+        centerOfPagePanel.add(legPresetButton);
+        centerOfPagePanel.add(chestPresetButton);
+        centerOfPagePanel.add(armPresetButton);
+        centerOfPagePanel.add(shoulderPresetButton);
+        centerOfPagePanel.add(absPresetButton);
+        centerOfPagePanel.add(backPresetButton);
+
+        setPresetButtonActionListeners();
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets action listeners for preset list buttons
+    public void setPresetButtonActionListeners() {
+        setLegPresetButtonActionListener();
+        setChestPresetButtonActionListener();
+        setArmPresetButtonActionListener();
+        setShoulderPresetButtonActionListener();
+        setAbsPresetButtonActionListener();
+        setBackPresetButtonActionListener();
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets action listener for leg preset list button
+    public void setLegPresetButtonActionListener() {
+        legPresetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
+                session.addLegDayExercises();
+                initializeQueueDropDown();
+            }
+        });
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets action listener for chest preset list button
+    public void setChestPresetButtonActionListener() {
+        chestPresetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
+                session.addChestDayExercises();
+                initializeQueueDropDown();
+            }
+        });
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets action listener for arm preset list button
+    public void setArmPresetButtonActionListener() {
+        armPresetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
+                session.addArmDayExercises();
+                initializeQueueDropDown();
+            }
+        });
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets action listener for shoulder preset list button
+    public void setShoulderPresetButtonActionListener() {
+        shoulderPresetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
+                session.addShoulderDayExercises();
+                initializeQueueDropDown();
+            }
+        });
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets action listener for abs preset list button
+    public void setAbsPresetButtonActionListener() {
+        absPresetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
+                session.addAbsDayExercises();
+                initializeQueueDropDown();
+            }
+        });
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets action listener for back preset list button
+    public void setBackPresetButtonActionListener() {
+        backPresetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playSound("./data/normal-hitnormal.wav");
+                session.addBackDayExercises();
+                initializeQueueDropDown();
+            }
+        });
     }
 
     //MODIFIES: this
@@ -379,7 +495,7 @@ public class FitnessApp extends JFrame {
         centerOfPagePanel.setLayout(null);
         initializeLowerPanelButtons();
         JLabel muscleGroupLabel = new JLabel("Muscle Groups");
-        muscleGroupLabel.setBounds(WIDTH / 20, HEIGHT / 16, WIDTH / 10, HEIGHT / 32);
+        muscleGroupLabel.setBounds(WIDTH / 20, HEIGHT / 16, WIDTH / 10 * 2, HEIGHT / 32);
         JLabel exerciseLabel = new JLabel("Exercises");
         exerciseLabel.setBounds(WIDTH / 20, HEIGHT / 16 * 8, WIDTH / 10, HEIGHT / 32);
         JLabel queueLabel = new JLabel("Your Queue");
