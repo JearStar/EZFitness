@@ -1,15 +1,14 @@
 package model;
 
 import listofexercises.muscleexercises.BarbellPress;
+import model.exceptions.NegativeValueException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MuscleExerciseTest {
     MuscleExercise testMuscleExercise;
@@ -21,9 +20,24 @@ public class MuscleExerciseTest {
 
     @Test
     public void testSetNumberOfSets() {
-        testMuscleExercise.setNumberOfSets(3);
-        assertEquals(3, testMuscleExercise.getSets());
+        try {
+            testMuscleExercise.setNumberOfSets(3);
+            assertEquals(3, testMuscleExercise.getSets());
+        } catch (NegativeValueException e) {
+            fail("not expecting exception");
+        }
     }
+
+    @Test
+    public void testSetNumberOfSetsNegative() {
+        try {
+            testMuscleExercise.setNumberOfSets(-3);
+            fail("expecting exception");
+        } catch (NegativeValueException e) {
+            //pass
+        }
+    }
+
 
     @Test
     public void testSetReps() {
@@ -32,11 +46,29 @@ public class MuscleExerciseTest {
         testListOfReps.add(10);
         testListOfReps.add(8);
 
-        testMuscleExercise.setReps(5);
-        testMuscleExercise.setReps(10);
-        testMuscleExercise.setReps(8);
+        try {
+            testMuscleExercise.setReps(5);
+            testMuscleExercise.setReps(10);
+            testMuscleExercise.setReps(8);
+        } catch (NegativeValueException e) {
+            fail("Not expecting exception");
+        }
 
         assertEquals(testListOfReps, testMuscleExercise.getReps());
+    }
+
+    @Test
+    public void testSetRepsNegative() {
+        List<Integer> testListOfReps = new ArrayList<>();
+        testListOfReps.add(5);
+        testListOfReps.add(10);
+        testListOfReps.add(8);
+
+        try {
+            testMuscleExercise.setReps(-5);
+        } catch (NegativeValueException e) {
+            //Pass
+        }
     }
 
     @Test
@@ -46,31 +78,55 @@ public class MuscleExerciseTest {
         testListOfWeights.add(195);
         testListOfWeights.add(180);
 
-        testMuscleExercise.setWeight(210);
-        testMuscleExercise.setWeight(195);
-        testMuscleExercise.setWeight(180);
+        try {
+            testMuscleExercise.setWeight(210);
+            testMuscleExercise.setWeight(195);
+            testMuscleExercise.setWeight(180);
+            assertEquals(testListOfWeights, testMuscleExercise.getWeight());
+        } catch (NegativeValueException e) {
+            fail("Not expecting exception");
+        }
+    }
 
-        assertEquals(testListOfWeights, testMuscleExercise.getWeight());
+    @Test
+    public void testSetWeightNegative() {
+        List<Integer> testListOfWeights = new ArrayList<>();
+        testListOfWeights.add(210);
+        testListOfWeights.add(195);
+        testListOfWeights.add(180);
+
+        try {
+            testMuscleExercise.setWeight(-210);
+            fail("exception expected");
+
+        } catch (NegativeValueException e) {
+            // do nothing
+        }
     }
 
     @Test
     public void testGetSummary() {
-        testMuscleExercise.setNumberOfSets(3);
+        try {
+            testMuscleExercise.setNumberOfSets(3);
 
-        testMuscleExercise.setWeight(200);
-        testMuscleExercise.setWeight(195);
-        testMuscleExercise.setWeight(180);
+            testMuscleExercise.setWeight(200);
+            testMuscleExercise.setWeight(195);
+            testMuscleExercise.setWeight(180);
 
-        testMuscleExercise.setReps(8);
-        testMuscleExercise.setReps(10);
-        testMuscleExercise.setReps(7);
+            testMuscleExercise.setReps(8);
+            testMuscleExercise.setReps(10);
+            testMuscleExercise.setReps(7);
+
+        } catch (NegativeValueException e) {
+            fail("Not expecting exception");
+        }
 
         assertEquals("Sets: 3" + "\nReps: 8 10 7 " + "\nWeights: 200 195 180 ",
                 testMuscleExercise.getSummary());
     }
 
     @Test
-    public void testListOfDoubleToInt(){
+    public void testListOfDoubleToInt() {
         List<Double> testList = new ArrayList<>();
         List<Integer> expectedList = new ArrayList<>();
 
@@ -116,7 +172,11 @@ public class MuscleExerciseTest {
         testWeights.add(210);
         testWeights.add(180);
 
-        testMuscleExercise.goThroughWorkout(testData);
+        try {
+            testMuscleExercise.goThroughWorkout(testData);
+        } catch (NegativeValueException e) {
+            fail("Not expecting exception");
+        }
 
         assertEquals(3, testMuscleExercise.getSets());
         assertEquals(testReps, testMuscleExercise.getReps());

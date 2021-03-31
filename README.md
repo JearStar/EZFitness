@@ -29,3 +29,12 @@ find the perfect weight for my 10-rep max. A few reasons this app would be bette
 - As a user, I want to be able to close the app and pick up where I left off.
 - As a user, I want to be able to save my workout summaries.
 - As a user, I want to be able to load and view my past workout summaries.
+
+#Phase 4: Task 2
+- Made CardioExercise and MuscleExercise robust by dealing with negative input values from the user. Inputting
+ negative values for time, sets, reps, or weight will throw a new NegativeValueException. Classes that throw this
+  exception: CardioExercise, MuscleExercise, Workout. Methods involved: setTime() in CardioExercise, goThroughWorkout
+  () in both CardioExercise and MuscleExercise, setReps(), setWeight(), and setNumberOfSets() in MuscleExercise.
+- Class hierarchy of CardioExercise and MuscleExercise both extending abstract class Workout, and all cardio
+ exercises in listofexercises package extend CardioExercise, and all muscle exercises in listofexercises package
+  extend MuscleExercise. 

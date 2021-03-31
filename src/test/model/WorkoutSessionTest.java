@@ -2,6 +2,7 @@ package model;
 
 import listofexercises.cardioexercises.Bicycle;
 import listofexercises.muscleexercises.*;
+import model.exceptions.NegativeValueException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -437,8 +438,12 @@ public class WorkoutSessionTest {
         infoList2.add(9.0);
         infoList2.add(185.0);
 
-        testBicycle.goThroughWorkout(infoList1);
-        testDeadlift.goThroughWorkout(infoList2);
+        try {
+            testBicycle.goThroughWorkout(infoList1);
+            testDeadlift.goThroughWorkout(infoList2);
+        } catch (NegativeValueException e) {
+            fail("Not expecting exception here");
+        }
         testSession.getFinishedList().add(testBicycle);
         testSession.getFinishedList().add(testDeadlift);
 

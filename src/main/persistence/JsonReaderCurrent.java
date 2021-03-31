@@ -2,6 +2,7 @@ package persistence;
 
 import model.Workout;
 import model.WorkoutSession;
+import model.exceptions.NegativeValueException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.lang.Math.abs;
 import static model.WorkoutSession.whichWorkoutToAdd;
 
 // A reader that reads WorkoutSession from JSON data stored in file
@@ -84,9 +86,20 @@ public class JsonReaderCurrent {
         }
 
         Workout currentWorkout = whichWorkoutToAdd(workoutName);
-        currentWorkout.goThroughWorkout(infoList);
-
-        ws.addToFinalList(currentWorkout);
+        try {
+            currentWorkout.goThroughWorkout(infoList);
+        } catch (NegativeValueException e) {
+            for (double d : infoList) {
+                d = abs(d);
+            }
+            try {
+                currentWorkout.goThroughWorkout(infoList);
+            } catch (NegativeValueException negativeValueException) {
+                negativeValueException.printStackTrace();
+            }
+        } finally {
+            ws.addToFinalList(currentWorkout);
+        }
     }
 
     //MODIFIES: ws

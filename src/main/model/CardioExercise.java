@@ -1,5 +1,6 @@
 package model;
 
+import model.exceptions.NegativeValueException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -18,8 +19,12 @@ public abstract class CardioExercise extends Workout {
 
     //MODIFIES: this
     //EFFECTS: sets the time done for this cardio workout
-    public void setTime(double time) {
-        this.time = abs(time);
+    public void setTime(double time) throws NegativeValueException {
+        if (time < 0) {
+            throw new NegativeValueException();
+        } else {
+            this.time = time;
+        }
     }
 
     //EFFECTS: retrieves time spent on cardio workout
@@ -29,7 +34,7 @@ public abstract class CardioExercise extends Workout {
 
     //MODIFIES: this
     //EFFECTS: goes through the workout
-    public void goThroughWorkout(List<Double> infoList) {
+    public void goThroughWorkout(List<Double> infoList) throws NegativeValueException {
         this.setTime(infoList.get(0));
     }
 

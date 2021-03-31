@@ -6,6 +6,7 @@ import listofexercises.muscleexercises.BarbellSquat;
 import listofexercises.muscleexercises.Deadlift;
 import model.PastLog;
 import model.WorkoutSession;
+import model.exceptions.NegativeValueException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -65,12 +66,14 @@ public class JsonWriterPastTest {
         testInfoList1.add(190.0);
         testInfoList2.add(10.0);
 
-        testBarbellSquat.goThroughWorkout(testInfoList1);
-        testBicycle.goThroughWorkout(testInfoList2);
-
-        testDeadlift.goThroughWorkout(testInfoList1);
-        testTreadmill.goThroughWorkout(testInfoList2);
-
+        try {
+            testBarbellSquat.goThroughWorkout(testInfoList1);
+            testBicycle.goThroughWorkout(testInfoList2);
+            testDeadlift.goThroughWorkout(testInfoList1);
+            testTreadmill.goThroughWorkout(testInfoList2);
+        } catch (NegativeValueException e) {
+            fail("Not expecting exception here");
+        }
         WorkoutSession testWorkoutSession1 = new WorkoutSession();
         testWorkoutSession1.addToFinalList(testBarbellSquat);
         testWorkoutSession1.addToFinalList(testBicycle);

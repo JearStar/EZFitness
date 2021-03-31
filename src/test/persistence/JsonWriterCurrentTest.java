@@ -5,6 +5,7 @@ import listofexercises.cardioexercises.TreadMill;
 import listofexercises.muscleexercises.BarbellSquat;
 import listofexercises.muscleexercises.Deadlift;
 import model.WorkoutSession;
+import model.exceptions.NegativeValueException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -66,8 +67,12 @@ public class JsonWriterCurrentTest {
         infoListBSquat.add(190.0);
         infoListBicycle.add(10.0);
 
-        testBarbellSquat.goThroughWorkout(infoListBSquat);
-        testBicycle.goThroughWorkout(infoListBicycle);
+        try {
+            testBarbellSquat.goThroughWorkout(infoListBSquat);
+            testBicycle.goThroughWorkout(infoListBicycle);
+        } catch (NegativeValueException e) {
+            fail("Not expecting exception here");
+        }
 
         try {
             WorkoutSession ws = new WorkoutSession();

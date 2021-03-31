@@ -10,6 +10,7 @@ import model.MuscleExercise;
 import model.PastLog;
 import model.Workout;
 import model.WorkoutSession;
+import model.exceptions.NegativeValueException;
 import persistence.JsonReaderCurrent;
 import persistence.JsonReaderPast;
 import persistence.JsonWriterCurrent;
@@ -453,12 +454,10 @@ public class FitnessApp extends JFrame {
                                 "You currently have an old session in progress, would you like to start a new one?",
                                 "Confirm action", JOptionPane.YES_NO_OPTION);
                         if (input == 0) {
-                            session = new WorkoutSession();
-                            centerOfPagePanel.setVisible(true);
+                            afterNewSessionButtonClicked();
                         }
                     } else {
-                        session = new WorkoutSession();
-                        centerOfPagePanel.setVisible(true);
+                        afterNewSessionButtonClicked();
                     }
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
@@ -466,6 +465,14 @@ public class FitnessApp extends JFrame {
                 playSound("./data/normal-hitnormal.wav");
             }
         });
+    }
+
+    //MODIFIES: this
+    //EFFECTS: helper function for what happens after new session button is pressed
+    private void afterNewSessionButtonClicked() {
+        session = new WorkoutSession();
+        initializeQueueDropDown();
+        centerOfPagePanel.setVisible(true);
     }
 
     //MODIFIES: this
@@ -541,11 +548,10 @@ public class FitnessApp extends JFrame {
                 playSound("./data/normal-hitnormal.wav");
                 if (session.getQueue().isEmpty()) {
                     sidebar.setSelectedIndex(TITLE_SCREEN_INDEX);
-
+                    centerOfPagePanel.setVisible(false);
                 } else {
                     startWorkoutGUI();
                 }
-                centerOfPagePanel.setVisible(false);
             }
         });
     }
@@ -562,6 +568,7 @@ public class FitnessApp extends JFrame {
         pastLogDropDown.setSelectedIndex(pastLog.getPastWorkoutSessions().size() - 1);
         updateSummaryField();
         sidebar.setSelectedIndex(VIEWING_TAB_INDEX);
+        centerOfPagePanel.setVisible(false);
     }
 
     //MODIFIES: this
@@ -849,10 +856,24 @@ public class FitnessApp extends JFrame {
         for (Workout w : ws.getQueue()) {
             List<Double> infoList = new ArrayList<>();
             askForUserInput(w, infoList);
-            w.goThroughWorkout(infoList);
-            ws.addToFinalList(w);
-            ws.removeFirstOfQueue();
-            saveCurrentWorkoutSession();
+            try {
+                w.goThroughWorkout(infoList);
+            } catch (NegativeValueException e) {
+                List<Double> newInfoList = new ArrayList<>();
+                for (Double d : infoList) {
+                    newInfoList.add(abs(d));
+                }
+                infoList = newInfoList;
+                try {
+                    w.goThroughWorkout(infoList);
+                } catch (NegativeValueException negativeValueException) {
+                    negativeValueException.printStackTrace();
+                }
+            } finally {
+                ws.addToFinalList(w);
+                ws.removeFirstOfQueue();
+                saveCurrentWorkoutSession();
+            }
         }
     }
 
@@ -862,10 +883,25 @@ public class FitnessApp extends JFrame {
         for (Workout w : ws.getQueue()) {
             List<Double> infoList = new ArrayList<>();
             askForUserInputGUI(w, infoList);
-            w.goThroughWorkout(infoList);
-            ws.addToFinalList(w);
-            ws.removeFirstOfQueue();
-            saveCurrentWorkoutSession();
+            try {
+                w.goThroughWorkout(infoList);
+            } catch (NegativeValueException e) {
+                List<Double> newInfoList = new ArrayList<>();
+                for (Double d : infoList) {
+                    newInfoList.add(abs(d));
+                }
+                infoList = newInfoList;
+                try {
+                    w.goThroughWorkout(infoList);
+                } catch (NegativeValueException negativeValueException) {
+                    negativeValueException.printStackTrace();
+                }
+            } finally {
+                ws.addToFinalList(w);
+                ws.removeFirstOfQueue();
+                saveCurrentWorkoutSession();
+            }
+
         }
     }
 

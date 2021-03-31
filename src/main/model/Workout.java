@@ -1,5 +1,6 @@
 package model;
 
+import model.exceptions.NegativeValueException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -98,7 +99,7 @@ public abstract class Workout implements Writable {
     }
 
     //EFFECTS: will set details of workout given details of a cardio exercise
-    public abstract void goThroughWorkout(List<Double> infoList);
+    public abstract void goThroughWorkout(List<Double> infoList) throws NegativeValueException;
 
     //EFFECTS: retrieves the summary for this workout
     public abstract String getSummary();

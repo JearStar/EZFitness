@@ -1,5 +1,6 @@
 package model;
 
+import model.exceptions.NegativeValueException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -20,22 +21,35 @@ public abstract class MuscleExercise extends Workout {
 
     //MODIFIES: this
     //EFFECTS: sets weight of a set
-    public void setWeight(int w) {
-        this.weights.add(abs(w));
+    public void setWeight(int w) throws NegativeValueException {
+        if (w < 0) {
+            throw new NegativeValueException();
+        } else {
+            this.weights.add(w);
+        }
     }
 
 
     //MODIFIES: this
     //EFFECTS: sets number of sets of workout
-    public void setNumberOfSets(int n) {
-        this.sets = abs(n);
+    public void setNumberOfSets(int n) throws NegativeValueException {
+        if (n < 0) {
+            throw new NegativeValueException();
+        } else {
+            this.sets = n;
+        }
+
     }
 
 
     //MODIFIES: this
     //EFFECTS: sets number of reps of a set
-    public void setReps(int n) {
-        this.reps.add(abs(n));
+    public void setReps(int n) throws NegativeValueException {
+        if (n < 0) {
+            throw new NegativeValueException();
+        } else {
+            this.reps.add(n);
+        }
     }
 
 
@@ -67,7 +81,7 @@ public abstract class MuscleExercise extends Workout {
 
     //MODIFIES: this
     //EFFECTS: will set details of workout given details of a muscle exercise
-    public void goThroughWorkout(List<Double> infoList) {
+    public void goThroughWorkout(List<Double> infoList) throws NegativeValueException {
         List<Integer> detailList = listOfDoubleToInteger(infoList);
         setNumberOfSets(detailList.get(0));
 
