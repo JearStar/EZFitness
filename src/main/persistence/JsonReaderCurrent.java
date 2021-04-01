@@ -98,6 +98,7 @@ public class JsonReaderCurrent {
                 currentWorkout.goThroughWorkout(infoList);
             } catch (NegativeValueException negativeValueException) {
                 negativeValueException.printStackTrace();
+                // this catch block would never occur
             }
         } finally {
             ws.addToFinalList(currentWorkout);

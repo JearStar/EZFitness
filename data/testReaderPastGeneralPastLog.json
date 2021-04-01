@@ -1,1 +1,2 @@
-{"pastWorkoutSessions":[{"finishedList":[{"workoutName":"Treadmill","info":[10]},{"workoutName":"Deadlift","info":[3,10,180,10,190,8,175]}],"sessionName":"01/03/2021 18:55:13","remainingList":[]},{"finishedList":[{"workoutName":"Bicycle","info":[15]},{"workoutName":"Barbell Squat","info":[3,10,165,9,170,8,165]}],"sessionName":"01/03/2021 18:56:27","remainingList":[]}]}
+{"pastWorkoutSessions":[{"finishedList":[{"workoutName":"Treadmill","info":[10]},{"workoutName":"Deadlift",
+  "info":[-3,10,180,10,190,8,175]}],"sessionName":"01/03/2021 18:55:13","remainingList":[]},{"finishedList":[{"workoutName":"Bicycle","info":[15]},{"workoutName":"Barbell Squat","info":[3,10,165,9,170,8,165]}],"sessionName":"01/03/2021 18:56:27","remainingList":[]}]}
