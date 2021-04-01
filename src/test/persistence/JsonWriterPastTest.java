@@ -1,7 +1,7 @@
 package persistence;
 
 import listofexercises.cardioexercises.Bicycle;
-import listofexercises.cardioexercises.TreadMill;
+import listofexercises.cardioexercises.Treadmill;
 import listofexercises.muscleexercises.BarbellSquat;
 import listofexercises.muscleexercises.Deadlift;
 import model.PastLog;
@@ -54,7 +54,7 @@ public class JsonWriterPastTest {
         BarbellSquat testBarbellSquat = new BarbellSquat();
         Bicycle testBicycle = new Bicycle();
         Deadlift testDeadlift = new Deadlift();
-        TreadMill testTreadmill = new TreadMill();
+        Treadmill testTreadmill = new Treadmill();
 
 
         testInfoList1.add(3.0);

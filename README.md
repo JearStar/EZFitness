@@ -38,3 +38,13 @@ find the perfect weight for my 10-rep max. A few reasons this app would be bette
 - Class hierarchy of CardioExercise and MuscleExercise both extending abstract class Workout, and all cardio
  exercises in listofexercises package extend CardioExercise, and all muscle exercises in listofexercises package
   extend MuscleExercise. 
+  
+#Phase 4: Task 3
+- If I had more time, I would have tried to figure out a better way to retrieve user input data when going through
+ workouts because the current implementation uses a list of doubles for the time, sets, reps, and weights which does
+ not seem like a very clean implementation.
+- The classes in the persistence package could be abstracted as there contains a decent amount of duplicate code. One
+ of them is used for PastLogs, and one of them is used for one temporary workout session.
+- The FitnessApp class could also use a lot of abstraction because the console-based UI and the GUI both share many
+ similar implementations. It was only a matter of how information was displayed that was different.
+- I probably could have used an enum to represent the choices available for selectionList in FitnessApp.

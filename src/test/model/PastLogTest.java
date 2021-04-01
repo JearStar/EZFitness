@@ -1,8 +1,7 @@
 package model;
 
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import listofexercises.cardioexercises.Bicycle;
-import listofexercises.cardioexercises.TreadMill;
+import listofexercises.cardioexercises.Treadmill;
 import listofexercises.muscleexercises.Deadlift;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ public class PastLogTest {
     PastLog testPastLog;
     WorkoutSession testWorkoutSession1;
     WorkoutSession testWorkoutSession2;
-    TreadMill testTreadmill;
+    Treadmill testTreadmill;
     Deadlift testDeadlift;
     Bicycle testBicycle;
 
@@ -26,7 +25,7 @@ public class PastLogTest {
     public void setup() {
         testBicycle = new Bicycle();
         testDeadlift = new Deadlift();
-        testTreadmill = new TreadMill();
+        testTreadmill = new Treadmill();
         testPastLog = new PastLog();
         testWorkoutSession1 = new WorkoutSession();
         testWorkoutSession1.setSessionName("testSession1");

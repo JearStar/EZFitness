@@ -3,7 +3,7 @@ package model;
 import listofexercises.cardioexercises.Bicycle;
 import listofexercises.cardioexercises.Elliptical;
 import listofexercises.cardioexercises.RowingMachine;
-import listofexercises.cardioexercises.TreadMill;
+import listofexercises.cardioexercises.Treadmill;
 import listofexercises.muscleexercises.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +19,7 @@ import static model.Workout.*;
 import static ui.FitnessApp.*;
 
 /**
- * A workout session that has a queue and methods that operate on this queue
+ * A workout session that has a queue and a finished list and methods that operate on this queue
  */
 
 public class WorkoutSession implements Writable {
@@ -165,7 +165,7 @@ public class WorkoutSession implements Writable {
         if (n.equals(ROWING.toLowerCase())) {
             return new RowingMachine();
         } else if (n.equals(TREAD.toLowerCase())) {
-            return new TreadMill();
+            return new Treadmill();
         } else if (n.equals(BICRUNCH.toLowerCase())) {
             return new BicycleCrunch();
         } else if (n.equals(CCURL.toLowerCase())) {

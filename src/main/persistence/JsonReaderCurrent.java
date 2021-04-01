@@ -17,7 +17,9 @@ import java.util.stream.Stream;
 import static java.lang.Math.abs;
 import static model.WorkoutSession.whichWorkoutToAdd;
 
-// A reader that reads WorkoutSession from JSON data stored in file
+/**
+ * A reader that reads WorkoutSession from JSON data stored in file
+ */
 public class JsonReaderCurrent {
 
     String source;

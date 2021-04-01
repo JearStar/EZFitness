@@ -7,6 +7,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+/**
+ * A writer that writes to PastLogs JSON data stored in file
+ */
+
 public class JsonWriterPast {
     private PrintWriter writer;
     private String destination;

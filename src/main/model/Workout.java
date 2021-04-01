@@ -9,8 +9,7 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * Abstract class that contains all properties and methods of all workouts regardless of whether it is
- * muscle or cardio.
+ * Abstract class that contains all properties and methods of all workouts.
  */
 
 public abstract class Workout implements Writable {

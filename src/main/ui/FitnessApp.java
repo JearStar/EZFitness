@@ -4,7 +4,7 @@ package ui;
 import listofexercises.cardioexercises.Bicycle;
 import listofexercises.cardioexercises.Elliptical;
 import listofexercises.cardioexercises.RowingMachine;
-import listofexercises.cardioexercises.TreadMill;
+import listofexercises.cardioexercises.Treadmill;
 import listofexercises.muscleexercises.*;
 import model.MuscleExercise;
 import model.PastLog;
@@ -63,8 +63,6 @@ public class FitnessApp extends JFrame {
     public static final int TITLE_SCREEN_INDEX = 0;
     public static final int VIEWING_TAB_INDEX = 1;
     public static final int ADDING_TAB_INDEX = 2;
-    private final JTabbedPane sidebar = new JTabbedPane();
-
     private static final String SESSION_STORE = "./data/currentsession.json";
     private static final String LOGS_STORE = "./data/pastlogs.json";
     private static final Scanner input = new Scanner(System.in);
@@ -72,6 +70,7 @@ public class FitnessApp extends JFrame {
     private final JsonReaderCurrent jsonReaderCurrent = new JsonReaderCurrent(SESSION_STORE);
     private final JsonWriterPast jsonWriterPast = new JsonWriterPast(LOGS_STORE);
     private final JsonReaderPast jsonReaderPast = new JsonReaderPast(LOGS_STORE);
+    private final JTabbedPane sidebar = new JTabbedPane();
     List<Workout> selectionList = new ArrayList<>();
     WorkoutSession session = new WorkoutSession();
     PastLog pastLog = new PastLog();
@@ -1286,6 +1285,6 @@ public class FitnessApp extends JFrame {
         selectionList.add(new Bicycle());
         selectionList.add(new Elliptical());
         selectionList.add(new RowingMachine());
-        selectionList.add(new TreadMill());
+        selectionList.add(new Treadmill());
     }
 }

@@ -18,6 +18,10 @@ import java.util.stream.Stream;
 import static java.lang.Math.abs;
 import static model.WorkoutSession.whichWorkoutToAdd;
 
+/**
+ * A reader that reads PastLogs from JSON data stored in file
+ */
+
 public class JsonReaderPast {
     String source;
 

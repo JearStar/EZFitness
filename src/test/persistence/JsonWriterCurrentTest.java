@@ -1,7 +1,7 @@
 package persistence;
 
 import listofexercises.cardioexercises.Bicycle;
-import listofexercises.cardioexercises.TreadMill;
+import listofexercises.cardioexercises.Treadmill;
 import listofexercises.muscleexercises.BarbellSquat;
 import listofexercises.muscleexercises.Deadlift;
 import model.WorkoutSession;
@@ -54,7 +54,7 @@ public class JsonWriterCurrentTest {
         List<Double> infoListBSquat = new ArrayList<>();
         List<Double> infoListBicycle = new ArrayList<>();
         Deadlift testDeadlift = new Deadlift();
-        TreadMill testTreadmill = new TreadMill();
+        Treadmill testTreadmill = new Treadmill();
         BarbellSquat testBarbellSquat = new BarbellSquat();
         Bicycle testBicycle = new Bicycle();
 

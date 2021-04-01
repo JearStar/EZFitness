@@ -4,9 +4,9 @@ import model.CardioExercise;
 
 import java.util.ArrayList;
 
-public class TreadMill extends CardioExercise {
+public class Treadmill extends CardioExercise {
 
-    public TreadMill() {
+    public Treadmill() {
         this.workoutName = TREAD;
         this.muscleGroup = new ArrayList<String>();
 

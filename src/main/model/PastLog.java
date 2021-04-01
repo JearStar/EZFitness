@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * A class that represents a list of workout sessions used to model past workout sessions.
+ */
+
 public class PastLog implements Writable {
     List<WorkoutSession> pastWorkoutSessions;
 
