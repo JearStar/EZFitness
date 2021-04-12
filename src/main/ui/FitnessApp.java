@@ -55,8 +55,8 @@ public class FitnessApp extends JFrame {
     public static final String DELETE_COMMAND = "delete";
     public static final String CLEAR_COMMAND = "clear";
     public static final String GO_BACK_COMMAND = "back";
-    public static final int WIDTH = 900;
-    public static final int HEIGHT = 500;
+    public static final int WIDTH = 1200;
+    public static final int HEIGHT = 600;
     public static final String TITLE_SCREEN_LABEL = "Menu";
     public static final String VIEWING_TAB_LABEL = "View Past Logs";
     public static final String ADDING_TAB_LABEL = "Workout Session";
